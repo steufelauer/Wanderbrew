@@ -6,7 +6,7 @@ public class Herb : Ingredient, ICutable
 {
     // Start is called before the first frame update
     [SerializeField] private GameObject originalHerb;
-    [SerializeField] private GameObject cutHerb;
+    [SerializeField] private List<GameObject> cutHerbs;
 
     public bool IsCut => isCut;
 
@@ -14,12 +14,17 @@ public class Herb : Ingredient, ICutable
     private GameObject currentActiveObject;
 
 
-    public void Cut(){
+    public void Cut(int rank){
         Debug.Log($"[Herb::Cut] is already cut = {isCut}");
         if(isCut) return;
         originalHerb.SetActive(false);
-        cutHerb.SetActive(true);
-        currentActiveObject = cutHerb;
+        if (rank >= cutHerbs.Count)
+        {
+            Debug.LogError($"[Herb::Cut]CutHerbs mesh missing for herb {gameObject.name} on rank={rank}");
+            rank = cutHerbs.Count - 1;
+        }
+        cutHerbs[rank].SetActive(true);
+        currentActiveObject = cutHerbs[rank];
         isCut = true;
     }
 

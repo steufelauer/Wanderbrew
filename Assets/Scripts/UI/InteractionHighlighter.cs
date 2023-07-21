@@ -57,7 +57,13 @@ public class InteractionHighlighter : MonoBehaviour
 
     public void UpdateHoverable(RaycastHit hit){
         if(!hoverableEnabled)
+        {
+            if(currentHoverable != null){
+                Debug.Log("Disabling hover");
+                currentHoverable.DisableHover();
+            }
             return;
+        }
         IHoverable hoverable = hit.collider.gameObject.GetComponent<IHoverable>();
 
         if (hoverable == currentHoverable)

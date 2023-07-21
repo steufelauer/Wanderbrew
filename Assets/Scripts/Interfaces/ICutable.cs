@@ -5,6 +5,6 @@ using UnityEngine;
 public interface ICutable
 {
     bool IsCut {get;}
-    void Cut();
+    void Cut(int rank);
     void Place(Vector3 transform);
 }

@@ -252,7 +252,7 @@ public class CuttingboardController : MonoBehaviour
 
             cutGameView.DisplayFinalRank("Rank " + "ABCDEFGH"[finalRank]);
 
-            currentCutable.Cut();
+            currentCutable.Cut(finalRank);
         }
         return rank;
     }
