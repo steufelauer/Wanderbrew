@@ -119,10 +119,20 @@ public class CutGameView : MonoBehaviour
     {
         mouseStartPoint.transform.position = pos;
         currentMouseStartPoint = pos;
+        
+        //TODO kick
+        mouseStartPoint.GetComponent<Image>().enabled = true;
+        mouseStartPoint.transform.position = pos;
     }
 
     public void SetMouseEndPoint(Vector3 pos)
     {
+        //TODO kick
+        if (!useDBG)
+        {
+            mouseStartPoint.GetComponent<Image>().enabled = false;
+        }
+    
         mouseEndPoint.transform.position = pos;
         currentMouseEndPoint = pos;
         DrawMouseLine();
@@ -142,8 +152,17 @@ public class CutGameView : MonoBehaviour
         // var topInput = currentMouseStartPoint;
         // var botInput = currentMouseEndPoint;
         // }
-
+        if(topInput.x == botInput.x){
+            Debug.LogError($"[CutGameView::SetMouseEndPoint] Division 0 prevented from x calculation, changing point");
+            botInput = new Vector3(botInput.x + 1f, botInput.y, 0);
+        }
         var slope = (topInput.y - botInput.y) / (topInput.x - botInput.x);
+
+        if (slope == 0f)
+        {
+            Debug.LogError($"[CutGameView::SetMouseEndPoint] Division 0 prevented from slope, changing slope");
+            slope = 0.01f;
+        }
         // Debug.Log("Slope:" + slope);
         // Debug.Log($"Slope:  ({topInput.y} - {botInput.y}) /  ({topInput.x} - {botInput.x})");
         // Debug.Log("Slope:" + (topInput.y - botInput.y)+ " / " + (topInput.x - botInput.x));
@@ -289,6 +308,12 @@ public class CutGameView : MonoBehaviour
         rect.localPosition = a.x <= b.x ? a : b;
         //rect.localPosition = a;
         Vector3 dif = a - b;
+
+        if(dif.x == 0){
+            Debug.LogError($"[CutGameView::DrawLine] Division 0 prevented from dif.x calculation, changing point");
+            dif = new Vector3(dif.x + 0.1f, dif.y, dif.z);
+        }
+
         rect.sizeDelta = new Vector3(dif.magnitude, 5f);
         rect.rotation = Quaternion.Euler(new Vector3(0, 0, 180 * Mathf.Atan(dif.y / dif.x) / Mathf.PI));
 
