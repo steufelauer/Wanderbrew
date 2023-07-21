@@ -24,7 +24,14 @@ public class CutGameView : MonoBehaviour
     [SerializeField] private Image mouseStartPoint;
     [SerializeField] private Image mouseEndPoint;
     [SerializeField] private Image mouseLineImage;
-    [SerializeField] private TMP_Text textField;
+    [SerializeField] private Button ReturnButton;
+    [SerializeField] private TMP_Text cutRankText;
+    [SerializeField] private TMP_Text finalRankText;
+    [SerializeField] private List<string> perfectTxts;
+    [SerializeField] private List<string> rankATxts;
+    [SerializeField] private List<string> rankBTxts;
+    [SerializeField] private List<string> rankCTxts;
+    [SerializeField] private List<string> badRankTxts;
     [SerializeField] private Image DbgLineTop;
     [SerializeField] private Image DbgLineBot;
     [SerializeField] private Image DbgPerfectRank;
@@ -61,6 +68,7 @@ public class CutGameView : MonoBehaviour
             DbgRanks.Add(DbgPerfectRank);
         }
         SetDbgImages();
+        Reset();
 
     }
 
@@ -79,11 +87,25 @@ public class CutGameView : MonoBehaviour
         DbgLineTop.GetComponent<Image>().enabled = useDBG;
         DbgLineBot.GetComponent<Image>().enabled = useDBG;
         DbgPerfectRank.GetComponent<Image>().enabled = useDBG;
+        mouseStartPoint.GetComponent<Image>().enabled = useDBG;
+        mouseEndPoint.GetComponent<Image>().enabled = useDBG;
+        
         foreach (var image in DbgRanks)
         {
             image.GetComponent<Image>().enabled = useDBG;
         }
     }
+
+    public void Reset()
+    {
+        cutRankText.text = "";
+        finalRankText.text = "";
+        ReturnButton.gameObject.SetActive(false);
+        EnableCanvasGroup(false);
+        //EnableLines(false);
+        mouseLineImage.transform.localScale = Vector3.zero;
+    }
+
 
     public void InitiatePointCondition(int perfectScorePerc, int rankPerc, int maxRanks)
     {
@@ -97,7 +119,6 @@ public class CutGameView : MonoBehaviour
     {
         mouseStartPoint.transform.position = pos;
         currentMouseStartPoint = pos;
-
     }
 
     public void SetMouseEndPoint(Vector3 pos)
@@ -176,7 +197,34 @@ public class CutGameView : MonoBehaviour
         }
 #endregion
 
-        controller.CalculatePercentOverlap(currentGoalTopPoint, currentGoalBotPoint, topReached, botReached, lineLength);
+        var rank = controller.CalculatePercentOverlap(currentGoalTopPoint, currentGoalBotPoint, topReached, botReached, lineLength);
+
+        switch (rank)
+        {
+            case 0:
+            var random = UnityEngine.Random.Range(0, perfectTxts.Count);
+            cutRankText.text = perfectTxts[random];
+            break;
+            case 1:
+            random = UnityEngine.Random.Range(0, rankATxts.Count);
+            cutRankText.text = rankATxts[random];
+            break;
+            case 2:
+            random = UnityEngine.Random.Range(0, rankBTxts.Count);
+            cutRankText.text = rankBTxts[random];
+            break;
+            case 3:
+            random = UnityEngine.Random.Range(0, rankCTxts.Count);
+            cutRankText.text = rankCTxts[random];
+            break;
+            case -1:
+            cutRankText.text = "";
+            break;
+            default:
+            random = UnityEngine.Random.Range(0, badRankTxts.Count);
+            cutRankText.text = badRankTxts[random];
+            break;
+        }
     }
 
     public void DrawRandomLine()
@@ -248,13 +296,10 @@ public class CutGameView : MonoBehaviour
         // rect.anchorMax = Vector2.zero;
     }
 
-    public void DisplayRanks(List<int> ranks)
+    public void DisplayFinalRank(string content)
     {
-        textField.text = "Ranks";
-        foreach (var item in ranks)
-        {
-            textField.text += " " + item;
-        }
+        finalRankText.text = content;
+        ReturnButton.gameObject.SetActive(true);
     }
 
 }

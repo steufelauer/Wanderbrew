@@ -59,39 +59,48 @@ public class CuttingboardController : MonoBehaviour
     private void StartCuttingMiniGame()
     {
         Debug.Log("START MINIGAAAME");
+        Reset();
         miniGameStarted = true;
         mainCamera.gameObject.SetActive(false);
         miniGameCamera.gameObject.SetActive(true);
+        cutGameView.Reset();
         cutGameView.EnableCanvasGroup(true);
-        ranks.Clear();
         StartRound();
         cutGameView.EnableLines(true);
         gameStateService.ChangeState(GameState.Minigame);
     }
+    private void Reset(){
+        finishedRoundCount = 0;
+        ranks.Clear();
+        miniGameStarted = false;
+        waitingForInput = false;
+    }
 
     private void EndCuttingMiniGame()
     {
+        Debug.Log("EndCuttingMiniGame");
         miniGameCamera.gameObject.SetActive(false);
         mainCamera.gameObject.SetActive(true);
         //ranks.Clear();
         //StartRound();
-        cutGameView.EnableLines(true);
         cutGameView.EnableCanvasGroup(false);
-        miniGameStarted = false;
+        Reset();
 
         gameStateService.ChangeState(GameState.Main);
     }
 
     private void OnMouseDown()
     {
-        if (!miniGameStarted && !waitingForInput) return;
+        Debug.Log($"OnMouseDown: miniGameStarted: {miniGameStarted} && waitingForInput:{waitingForInput}");
+        if (!miniGameStarted || !waitingForInput) return;
         Debug.Log("OnMouseDown CutGameView! MousePos:" + Input.mousePosition);
         cutGameView.SetMouseStartingPoint(Input.mousePosition);
     }
 
     private void OnMouseUp()
     {
-        if (!miniGameStarted && !waitingForInput) return;
+        Debug.Log($"OnMouseDown: miniGameStarted: {miniGameStarted} && waitingForInput:{waitingForInput}");
+        if (!miniGameStarted || !waitingForInput) return;
         Debug.Log("OnMouseUp CutGameView! MousePos:" + Input.mousePosition);
         cutGameView.SetMouseEndPoint(Input.mousePosition);
     }
@@ -102,9 +111,11 @@ public class CuttingboardController : MonoBehaviour
         //Debug.Log("OnMouseDrag CutGameView! MousePos:" + Input.mousePosition);
     }
 
-    public void CalculatePercentOverlap(Vector3 topGoal, Vector3 botGoal, Vector3 topReached, Vector3 botReached, float lineLength)
+    public int CalculatePercentOverlap(Vector3 topGoal, Vector3 botGoal, Vector3 topReached, Vector3 botReached, float lineLength)
     {
-
+        Debug.Log("CalculatePercentOverlap waitingForInput:"+waitingForInput);
+        if(!waitingForInput) return -1;
+        waitingForInput = false;
         int rank = 0;
         var perfectScoreSize = lineLength * perfectScoreMargin / 100;
         var rankScoreSize = lineLength * rankMargin / 100;
@@ -205,15 +216,28 @@ public class CuttingboardController : MonoBehaviour
         ranks.Add(rank);
 
         finishedRoundCount++;
-        cutGameView.DisplayRanks(ranks);
-        if (finishedRoundCount != roundCount)
+        if (finishedRoundCount < roundCount)
         {
             StartRound();
         }
-        else if (finishedRoundCount == roundCount)
+        else if (finishedRoundCount >= roundCount)
         {
+            waitingForInput = false;
+            int finalRank = 0;
+            string dbgLog = "";
+            for (int i = 0; i < ranks.Count; i++)
+            {
+                dbgLog += " + "+ranks[i];
+                finalRank += ranks[i];
+            }
+            dbgLog += " ->  " + finalRank;
+            finalRank /= ranks.Count;
+            dbgLog += " / "+ranks.Count+" -> " +finalRank;
+            Debug.Log("FINALRANKCALCULATION: " + dbgLog);
+            cutGameView.DisplayFinalRank("Rank " + "ABCDEFG"[finalRank]);
             currentCutable.Cut();
         }
+        return rank;
     }
 
 
