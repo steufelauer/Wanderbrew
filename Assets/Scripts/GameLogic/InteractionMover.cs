@@ -11,7 +11,6 @@ public class InteractionMover : MonoBehaviour
     IPickable currentPickable;
     bool hoverEnabled = true;
     Plane plane = new Plane(Vector3.up, Vector3.up*3f);
-
     
     bool interactionEnabled => gameStateService.CurrentGameState == GameState.Main;
     IGameStateService gameStateService;
