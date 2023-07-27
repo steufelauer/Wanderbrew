@@ -15,7 +15,7 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     public bool IsPickedUp => isPickedUp;
     private bool isPickedUp = false;
 
-     void Start() {
+    public virtual void Start() {
         serviceLocator = ServiceLocatorProvider.GetServiceLocator();
         uIProviderService = serviceLocator.GetService<IUIProviderService>();
         tooltipProvider = uIProviderService.GetProvider<TooltipProvider>();
