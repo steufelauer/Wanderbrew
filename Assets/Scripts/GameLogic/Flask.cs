@@ -34,7 +34,7 @@ public class Flask : Ingredient, ILightMixable
 
     public void Mix(int rank)
     {
-        Debug.Log($"[Herb::Flask] is already cut = {isMixed}");
+        //Debug.Log($"[Herb::Flask] is already cut = {isMixed}");
         if (isMixed) return;
         isMixed = true;
     }
@@ -46,7 +46,7 @@ public class Flask : Ingredient, ILightMixable
 
     public void Place(Vector3 position)
     {
-        Debug.Log("Placing flask to " + position);
+        //Debug.Log("Placing flask to " + position);
         this.transform.position = position;
         this.transform.rotation = Quaternion.Euler(Vector3.zero);
     }

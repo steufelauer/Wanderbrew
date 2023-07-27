@@ -51,6 +51,9 @@ public class LightMixerController : MonoBehaviour
     private float minColVal = 0.1f;
     private float maxColVal = 0.9f;
     private float startPercentage = 0;
+    private Vector2 startPercPoint = new();
+    private float firstSlope = 0f;
+    private float secondSlope = 0f;
 
     private float saturationStepsDown;
     private float saturationStepsUp;
@@ -96,7 +99,12 @@ public class LightMixerController : MonoBehaviour
 
         // cutGameView.EndMinigame += EndCuttingMiniGame;
         colorFullDistance = Vector2.Distance(new Vector2(minColVal, maxColVal), new Vector2(maxColVal, minColVal));
-        Debug.Log("FullDistance:" + colorFullDistance);
+
+
+
+        // firstSlope = (maxColVal - startColorSaturation) / (minColVal - startColorValue);
+        // secondSlope = (maxColVal- startColorSaturation) / ( minColVal - startColorValue);
+        //Debug.Log("FullDistance:" + colorFullDistance);
         Reset();
     }
 
@@ -144,32 +152,39 @@ public class LightMixerController : MonoBehaviour
         Vector2 maxV = new Vector2(maxColVal, minColVal);
         Vector2 minV = new Vector2(minColVal, maxColVal);
 
+        firstSlope = (startColorSaturation - minColVal) / (startColorValue - maxColVal);
+        secondSlope = (maxColVal - startColorSaturation) / (minColVal - startColorValue);
+
+        Debug.Log($"Slope1: {firstSlope} = {(startColorSaturation - minColVal)} / {(startColorValue - maxColVal)};");
+        Debug.Log($"Slope1: {firstSlope} = {startColorSaturation} - {minColVal} / {startColorValue} - {maxColVal};");
+        Debug.Log($"Slope3: {secondSlope} = {(maxColVal - startColorSaturation)} / {(minColVal - startColorValue)};");
+        Debug.Log($"Slope3: {secondSlope} = {maxColVal} - {startColorSaturation} / {minColVal} - {startColorValue};");
 
         //TEEEST
         var a = Vector2.Distance(minV, new Vector2(startColorSaturation, startColorValue));
         var b = Vector2.Distance(new Vector2(startColorSaturation, startColorValue), maxV);
         var c = Vector2.Distance(minV, maxV);
 
-        Debug.Log("a: " + a + " b: " + b + " c: " +c);
+        //Debug.Log("a: " + a + " b: " + b + " c: " +c);
 
-        var alpha = Mathf.Acos((-0.5f*a*a + 0.5f*b*b + 0.5f*c*c)/(b*c)) * Mathf.Rad2Deg;
-        var beta = Mathf.Acos((0.5f*a*a - 0.5f*b*b + 0.5f*c*c)/(a*c)) * Mathf.Rad2Deg;
+        var alpha = Mathf.Acos((-0.5f * a * a + 0.5f * b * b + 0.5f * c * c) / (b * c)) * Mathf.Rad2Deg;
+        var beta = Mathf.Acos((0.5f * a * a - 0.5f * b * b + 0.5f * c * c) / (a * c)) * Mathf.Rad2Deg;
         var gamma = 180 - alpha - beta;
 
-        var delta = 180-90-alpha;
-        var d = Mathf.Sin(delta)*b; 
+        var delta = 180 - 90 - alpha;
+        var d = Mathf.Sin(delta) * b;
 
 
-        var v2a = b * Mathf.Sin(alpha*Mathf.Deg2Rad);
-        var v2b = Mathf.Sqrt(-v2a*v2a+b*b);
+        var v2a = b * Mathf.Sin(alpha * Mathf.Deg2Rad);
+        var v2b = Mathf.Sqrt(-v2a * v2a + b * b);
 
         var v2op = c - v2b;
-        startPercentage = v2op/c;
+        startPercentage = v2op / c;
+        startPercPoint = Vector2.MoveTowards(minV, maxV, v2op);
+        //Debug.Log("startPercPoint" + startPercPoint);
 
-        //lightMixGameView.SetUpDebug(AP1);
-        
-        Debug.Log("Alpha: " + alpha +", beta" + beta + " gamma: " + gamma);
-        Debug.Log("v2a: " + v2a + " v2b:" + v2b + " -> v2op: "+v2op + " startPercentage:" + startPercentage );
+        // Debug.Log("Alpha: " + alpha +", beta" + beta + " gamma: " + gamma);
+        // Debug.Log("v2a: " + v2a + " v2b:" + v2b + " -> v2op: "+v2op + " startPercentage:" + startPercentage );
 
         var randomVal = UnityEngine.Random.Range(0.1f, 0.9f);
         if (Math.Abs(colorVal - randomVal) <= 0.1)
@@ -177,10 +192,33 @@ public class LightMixerController : MonoBehaviour
             Debug.Log($"ColorVal: {colorVal} vs randomVal: {randomVal} -> {Math.Abs(colorVal - randomVal)}");
         }
 
-        goalColor = Color.HSVToRGB(colorHue, 1-randomVal, randomVal);
+        var newSat = ReceiveSaturationFromValue(randomVal);
+        goalColor = Color.HSVToRGB(colorHue, newSat, randomVal);
 
 
+        lightMixGameView.SetUpDebug(startPercPoint, new Vector2(newSat, randomVal));
         lightMixGameView.SetUpView(startColor, goalColor);
+    }
+
+    private float ReceiveSaturationFromValue(float val)
+    {
+        var point = 0f;
+        //Debug.Log("Val:" + val + " >= startColorSaturation " + startColorValue);
+        if (val*100f >= startColorValue*100f)
+        {
+            // Debug.Log("minColVal:"+minColVal+" <= startColorSaturation.y " + startColorSaturation);
+            // Debug.Log($"{val}*{firstSlope} + {maxColVal}");
+            point = (val - maxColVal) * firstSlope + minColVal;
+            //Debug.Log($"AAAANew Point: {point} -> ({val} - {maxColVal}) * {firstSlope} + {minColVal}");
+        }
+        else
+        {
+            //Debug.Log($"{val}*{secondSlope} + {startColorValue}");
+            //point = (val - startColorValue) * secondSlope + startColorSaturation;
+            point = (val - startColorValue) * secondSlope + startColorSaturation;
+            //Debug.Log($"BBBBNew Point: {point} -> ({val} - {startColorValue}) * {secondSlope} + {startColorSaturation}");
+        }
+        return point;
     }
 
     private void EndMiniGame()
@@ -282,23 +320,39 @@ public class LightMixerController : MonoBehaviour
 
     private void UpdateColor(float addVal)
     {
-
         currentColor = new Color(currentMixable.FluidColor.r, currentMixable.FluidColor.g, currentMixable.FluidColor.b);
         Color.RGBToHSV(currentColor, out float newHue, out float newSat, out float newVal);
         switch (currentMixingState)
         {
             case MixingState.Light:
+                if (newVal >= maxColVal)
+                {
+                    newVal = 0.9f;
+                    return;
+                }
                 newVal += addVal;
+                if (newVal >= maxColVal) newVal = maxColVal;
                 break;
             case MixingState.Darkness:
+
+                if (newVal <= minColVal)
+                {
+                    newVal = 0.1f;
+                    return;
+                }
                 newVal -= addVal;
+                if (newVal <= minColVal) newVal = minColVal;
                 break;
         }
-        Color newCol = Color.HSVToRGB(newHue, 1-newVal, newVal);
+        var calcSat = ReceiveSaturationFromValue(newVal);
+        //TODO to debug
+        lightMixGameView.SetUpDebug(startPercPoint, new Vector2(calcSat, newVal));
+        Color newCol = Color.HSVToRGB(newHue, calcSat, newVal);
         currentMixable.FluidColor = newCol;
     }
 
-    private void ColorCalculator(){
+    private void ColorCalculator()
+    {
 
     }
 
@@ -306,7 +360,7 @@ public class LightMixerController : MonoBehaviour
     private void OnLightColliderChanged(bool entered, Collider other)
     {
         ILightMixable otherMixable = other.gameObject.GetComponent<ILightMixable>();
-        Debug.Log($"OnLightColliderChanged otherMixable = {otherMixable}, same as current? {otherMixable == currentMixable}");
+        //Debug.Log($"OnLightColliderChanged otherMixable = {otherMixable}, same as current? {otherMixable == currentMixable}");
         if (otherMixable == null || otherMixable != currentMixable)
         {
             return;
@@ -316,7 +370,7 @@ public class LightMixerController : MonoBehaviour
     private void OnDarknessColliderChanged(bool entered, Collider other)
     {
         ILightMixable otherMixable = other.gameObject.GetComponent<ILightMixable>();
-        Debug.Log($"OnDarknessColliderChanged otherMixable = {otherMixable}, same as current? {otherMixable == currentMixable}");
+        //Debug.Log($"OnDarknessColliderChanged otherMixable = {otherMixable}, same as current? {otherMixable == currentMixable}");
         if (otherMixable == null || otherMixable != currentMixable)
         {
             return;
@@ -327,7 +381,7 @@ public class LightMixerController : MonoBehaviour
     private void OnFinishedTriggered(Collider other)
     {
         ILightMixable otherMixable = other.gameObject.GetComponent<ILightMixable>();
-        Debug.Log($"OnFinishedTriggered otherMixable = {otherMixable}, same as current? {otherMixable == currentMixable}");
+        //Debug.Log($"OnFinishedTriggered otherMixable = {otherMixable}, same as current? {otherMixable == currentMixable}");
         if (otherMixable == null || otherMixable != currentMixable)
         {
             return;
@@ -338,13 +392,13 @@ public class LightMixerController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (miniGameStarted) return;
-        Debug.Log($"[LightMixerController:OnCollisionEnter] other={other.gameObject.name}");
+        //Debug.Log($"[LightMixerController:OnCollisionEnter] other={other.gameObject.name}");
 
         var ingredient = other.gameObject.GetComponent<Ingredient>();
         if (ingredient == null) return;
 
         ILightMixable lightMixable = ingredient as ILightMixable;
-        Debug.Log($"[LightMixerController:OnCollisionEnter] mixable={lightMixable}");
+        //Debug.Log($"[LightMixerController:OnCollisionEnter] mixable={lightMixable}");
 
         if (lightMixable != null)
         {

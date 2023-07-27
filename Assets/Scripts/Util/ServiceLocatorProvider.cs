@@ -13,7 +13,7 @@ public static class ServiceLocatorProvider
 
     public static IServiceLocator GetServiceLocator()
     {
-        Debug.Log("GetServiceLocator, found locator: "+locator);
+        //Debug.Log("GetServiceLocator, found locator: "+locator);
         return locator;
     }
 }

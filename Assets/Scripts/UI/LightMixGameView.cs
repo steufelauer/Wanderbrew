@@ -19,6 +19,7 @@ public class LightMixGameView : MiniGameView
     [SerializeField] private Image DbgLineBot;
     [SerializeField] private Image DbgLineDistance;
     [SerializeField] private Image DbgPointPlacement;
+    [SerializeField] private Image DbgNewValPlacement;
 
     private Color ingredientColor;    
     private Color goalColor;    
@@ -49,9 +50,10 @@ public class LightMixGameView : MiniGameView
         }
     }
 
-    public void SetUpDebug(Vector2 calc){
-        Debug.Log("SetupDebug calc:" + calc);
-        DbgPointPlacement.rectTransform.localPosition = new Vector3(calc.x, calc.y, 0);
+    public void SetUpDebug(Vector2 perc, Vector2 calc){
+        Debug.Log("SetupDebug perc:" + perc +" calc: " +calc);
+        DbgPointPlacement.rectTransform.localPosition = new Vector3(perc.x*100, perc.y*100, 0);
+        DbgNewValPlacement.rectTransform.localPosition = new Vector3(calc.x*100, calc.y*100, 0);
     }
 
 
@@ -93,7 +95,7 @@ public class LightMixGameView : MiniGameView
         Vector3 a = new Vector3(top.x, top.y, 0);
         Vector3 b = new Vector3(bot.x, bot.y, 0);
 
-        Debug.Log($"A={a}, B={b}");
+        //Debug.Log($"A={a}, B={b}");
         rect.localPosition = a.x <= b.x ? a : b;
         Vector3 dif = a - b;
 

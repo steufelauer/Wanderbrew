@@ -37,7 +37,7 @@ public class InteractionMover : MonoBehaviour
         if(!interactionEnabled) return;
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("MouseUp, pickable: " + currentPickable);
+            //Debug.Log("MouseUp, pickable: " + currentPickable);
             if (currentPickable != null)
             {
                 currentPickable.Release();

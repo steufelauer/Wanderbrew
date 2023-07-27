@@ -18,7 +18,7 @@ public class MiniGameView : MonoBehaviour
     {
         canvas = this.gameObject.GetComponentInParent<Canvas>();
         canvasGroup = this.gameObject.GetComponent<CanvasGroup>();
-        Debug.Log($"Found canvas? ={canvas}");
+        //Debug.Log($"Found canvas? ={canvas}");
 
     }
 
