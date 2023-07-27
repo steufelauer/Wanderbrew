@@ -14,6 +14,11 @@ public class LightMixGameView : MiniGameView
     [SerializeField] private TMP_Text dbgColorValueCurrent;
     [SerializeField] private Image dbgStartColorImg;
     [SerializeField] private CanvasGroup finishedConfirmation;
+    
+    [SerializeField] private Image DbgLineTop;
+    [SerializeField] private Image DbgLineBot;
+    [SerializeField] private Image DbgLineDistance;
+    [SerializeField] private Image DbgPointPlacement;
 
     private Color ingredientColor;    
     private Color goalColor;    
@@ -28,7 +33,8 @@ public class LightMixGameView : MiniGameView
 
     public void SetUpView(Color ingredientColor, Color goalColor){
 
-
+        this.ingredientColor = ingredientColor;
+        this.goalColor = goalColor;
         goalColorImg.color = goalColor;
 
         //dbg
@@ -38,7 +44,14 @@ public class LightMixGameView : MiniGameView
             dbgColorValueGoal.text = goalColorVal + "";
             dbgColorValueCurrent.text = currentColorVal + "";
             dbgStartColorImg.color = ingredientColor;
+
+            DisplayDebugLines();
         }
+    }
+
+    public void SetUpDebug(Vector2 calc){
+        Debug.Log("SetupDebug calc:" + calc);
+        DbgPointPlacement.rectTransform.localPosition = new Vector3(calc.x, calc.y, 0);
     }
 
 
@@ -60,6 +73,38 @@ public class LightMixGameView : MiniGameView
     public void FinishedDeclined()
     {
         DisplayFinishConfirmation(false);
+    }
+
+    private void DisplayDebugLines(){
+        if(useDBG){
+            Color.RGBToHSV(ingredientColor, out float currentColorHue, out float currentColorSat, out float currentColorVal);
+            
+            DrawLine(DbgLineBot, new Vector3(10,90,0), new Vector3(currentColorSat*100f,currentColorVal*100f,0));
+            DrawLine(DbgLineTop, new Vector3(currentColorSat*100f,currentColorVal*100f,0), new Vector3(90,10,0));
+            DrawLine(DbgLineDistance, new Vector3(10,90,0), new Vector3(90,10,0));
+        }
+    }
+
+    public void DrawLine(Image img, Vector3 top, Vector3 bot)
+    {
+        RectTransform rect = img.GetComponent<RectTransform>();
+        rect.localScale = Vector3.one;
+
+        Vector3 a = new Vector3(top.x, top.y, 0);
+        Vector3 b = new Vector3(bot.x, bot.y, 0);
+
+        Debug.Log($"A={a}, B={b}");
+        rect.localPosition = a.x <= b.x ? a : b;
+        Vector3 dif = a - b;
+
+        if(dif.x == 0){
+            Debug.LogError($"[CutGameView::DrawLine] Division 0 prevented from dif.x calculation, changing point");
+            dif = new Vector3(dif.x + 0.1f, dif.y, dif.z);
+        }
+
+        rect.sizeDelta = new Vector3(dif.magnitude, 5f);
+        rect.rotation = Quaternion.Euler(new Vector3(0, 0, 180 * Mathf.Atan(dif.y / dif.x) / Mathf.PI));
+
     }
 
 

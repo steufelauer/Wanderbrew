@@ -41,11 +41,24 @@ public class LightMixerController : MonoBehaviour
     private Color startColor;
     private Color currentColor;
     private Color goalColor;
+    private float startColorValue;
+    private float startColorSaturation;
     private float goalColorValue;
+    private float goalColorSaturation;
     private float currentColorValue;
+    private float currentColorSaturation;
+
+    private float minColVal = 0.1f;
+    private float maxColVal = 0.9f;
+    private float startPercentage = 0;
+
+    private float saturationStepsDown;
+    private float saturationStepsUp;
+    private float valueStepsDown;
+    private float valueStepsUp;
+    private float colorFullDistance;
 
     //SpeedCalc
-    private float speed;
     private Vector3 previousPosition;
     private Vector3 currentPosition;
 
@@ -82,6 +95,8 @@ public class LightMixerController : MonoBehaviour
         // //StartCuttingMiniGame();
 
         // cutGameView.EndMinigame += EndCuttingMiniGame;
+        colorFullDistance = Vector2.Distance(new Vector2(minColVal, maxColVal), new Vector2(maxColVal, minColVal));
+        Debug.Log("FullDistance:" + colorFullDistance);
         Reset();
     }
 
@@ -121,14 +136,48 @@ public class LightMixerController : MonoBehaviour
 
     private void SetUpGame()
     {
-
-        var randomVal = UnityEngine.Random.Range(0.05f, 0.95f);
         Color.RGBToHSV(startColor, out float colorHue, out float colorSat, out float colorVal);
+
+
+        startColorSaturation = colorSat;
+        startColorValue = colorVal;
+        Vector2 maxV = new Vector2(maxColVal, minColVal);
+        Vector2 minV = new Vector2(minColVal, maxColVal);
+
+
+        //TEEEST
+        var a = Vector2.Distance(minV, new Vector2(startColorSaturation, startColorValue));
+        var b = Vector2.Distance(new Vector2(startColorSaturation, startColorValue), maxV);
+        var c = Vector2.Distance(minV, maxV);
+
+        Debug.Log("a: " + a + " b: " + b + " c: " +c);
+
+        var alpha = Mathf.Acos((-0.5f*a*a + 0.5f*b*b + 0.5f*c*c)/(b*c)) * Mathf.Rad2Deg;
+        var beta = Mathf.Acos((0.5f*a*a - 0.5f*b*b + 0.5f*c*c)/(a*c)) * Mathf.Rad2Deg;
+        var gamma = 180 - alpha - beta;
+
+        var delta = 180-90-alpha;
+        var d = Mathf.Sin(delta)*b; 
+
+
+        var v2a = b * Mathf.Sin(alpha*Mathf.Deg2Rad);
+        var v2b = Mathf.Sqrt(-v2a*v2a+b*b);
+
+        var v2op = c - v2b;
+        startPercentage = v2op/c;
+
+        //lightMixGameView.SetUpDebug(AP1);
+        
+        Debug.Log("Alpha: " + alpha +", beta" + beta + " gamma: " + gamma);
+        Debug.Log("v2a: " + v2a + " v2b:" + v2b + " -> v2op: "+v2op + " startPercentage:" + startPercentage );
+
+        var randomVal = UnityEngine.Random.Range(0.1f, 0.9f);
         if (Math.Abs(colorVal - randomVal) <= 0.1)
         {
             Debug.Log($"ColorVal: {colorVal} vs randomVal: {randomVal} -> {Math.Abs(colorVal - randomVal)}");
         }
-        goalColor = Color.HSVToRGB(colorHue, colorSat, randomVal);
+
+        goalColor = Color.HSVToRGB(colorHue, 1-randomVal, randomVal);
 
 
         lightMixGameView.SetUpView(startColor, goalColor);
@@ -245,8 +294,12 @@ public class LightMixerController : MonoBehaviour
                 newVal -= addVal;
                 break;
         }
-        Color newCol = Color.HSVToRGB(newHue, newSat, newVal);
+        Color newCol = Color.HSVToRGB(newHue, 1-newVal, newVal);
         currentMixable.FluidColor = newCol;
+    }
+
+    private void ColorCalculator(){
+
     }
 
 
