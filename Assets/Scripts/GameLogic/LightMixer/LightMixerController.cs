@@ -18,6 +18,7 @@ public class LightMixerController : MonoBehaviour
     [SerializeField] private MixingFinishedTrigger finishedTrigger;
     [SerializeField] private MixingCollider lightCollider;
     [SerializeField] private MixingCollider darknessCollider;
+    [SerializeField] private MeshRenderer dbgCube;
 
     protected IServiceLocator serviceLocator;
     protected TooltipProvider tooltipProvider;
@@ -139,6 +140,7 @@ public class LightMixerController : MonoBehaviour
         currentMiniGameGO.layer = 6;
 
         finishedTrigger.enabled = true;
+        
         SetUpGame();
     }
 
@@ -198,6 +200,10 @@ public class LightMixerController : MonoBehaviour
 
         lightMixGameView.SetUpDebug(startPercPoint, new Vector2(newSat, randomVal));
         lightMixGameView.SetUpView(startColor, goalColor);
+
+        
+        //TODO dbg
+        dbgCube.material.color = new Color(goalColor.r, goalColor.g, goalColor.b);
     }
 
     private float ReceiveSaturationFromValue(float val)

@@ -54,6 +54,8 @@ public class LightMixGameView : MiniGameView
         Debug.Log("SetupDebug perc:" + perc +" calc: " +calc);
         DbgPointPlacement.rectTransform.localPosition = new Vector3(perc.x*100, perc.y*100, 0);
         DbgNewValPlacement.rectTransform.localPosition = new Vector3(calc.x*100, calc.y*100, 0);
+
+        dbgColorValueCurrent.text = calc.y + "";
     }
 
 
