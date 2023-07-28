@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class LightMixGameView : MiniGameView
 {
     [SerializeField] private Image goalColorImg;
+    [SerializeField] private TMP_Text rankText;
+    [SerializeField] private CanvasGroup rankView;
 
     [Header("Debug")]
     [SerializeField] private TMP_Text dbgColorValueGoal;
@@ -20,6 +22,7 @@ public class LightMixGameView : MiniGameView
     [SerializeField] private Image DbgLineDistance;
     [SerializeField] private Image DbgPointPlacement;
     [SerializeField] private Image DbgNewValPlacement;
+    [SerializeField] private Image DbgGoalPlacement;
 
     private Color ingredientColor;    
     private Color goalColor;    
@@ -38,6 +41,10 @@ public class LightMixGameView : MiniGameView
         this.goalColor = goalColor;
         goalColorImg.color = goalColor;
 
+        //Todo move to Minigameview
+        rankView.alpha = 0;
+        rankView.interactable = false;
+
         //dbg
         if(useDBG){
             Color.RGBToHSV(goalColor, out float goalColorHue, out float goalColorSat, out float goalColorVal);
@@ -50,10 +57,11 @@ public class LightMixGameView : MiniGameView
         }
     }
 
-    public void SetUpDebug(Vector2 perc, Vector2 calc){
+    public void SetUpDebug(Vector2 perc, Vector2 calc, Vector2 goal){
         Debug.Log("SetupDebug perc:" + perc +" calc: " +calc);
         DbgPointPlacement.rectTransform.localPosition = new Vector3(perc.x*100, perc.y*100, 0);
         DbgNewValPlacement.rectTransform.localPosition = new Vector3(calc.x*100, calc.y*100, 0);
+        DbgGoalPlacement.rectTransform.localPosition = new Vector3(goal.x*100, goal.y*100, 0);
 
         dbgColorValueCurrent.text = calc.y + "";
     }
@@ -61,12 +69,22 @@ public class LightMixGameView : MiniGameView
 
     //DBG
     public void Remix(){
-        //SetUp(ingredientColor);
+        //DBG SetUp(ingredientColor);
+    }
+
+    public void Reset(){
+
     }
 
     public void DisplayFinishConfirmation(bool enable){
         finishedConfirmation.alpha = enable? 1:0;
         finishedConfirmation.interactable = enable;
+    }
+
+    public void DisplayRank(string rank){
+        rankText.text = "Rank: " +rank;
+        rankView.alpha = 1;
+        rankView.interactable = true;
     }
 
     public void FinishConfirmed()

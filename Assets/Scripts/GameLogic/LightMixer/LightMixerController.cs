@@ -11,14 +11,16 @@ public class LightMixerController : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Camera miniGameCamera;
     [SerializeField] private Transform startPlacement;
-    [SerializeField] private int roundCount = 5;
-    [SerializeField] private int maxRanks = 3;
+    [SerializeField] private Transform cancelledPlacement;
     [SerializeField] private GameObject backgroundPlane;
     [SerializeField] private GameObject movementPlane;
     [SerializeField] private MixingFinishedTrigger finishedTrigger;
     [SerializeField] private MixingCollider lightCollider;
     [SerializeField] private MixingCollider darknessCollider;
     [SerializeField] private MeshRenderer dbgCube;
+    [SerializeField] private float perfectScoreMargin = 0.05f;
+    [SerializeField] private float rankMargin = 0.1f;
+    [SerializeField] private int maxRanks = 3;
 
     protected IServiceLocator serviceLocator;
     protected TooltipProvider tooltipProvider;
@@ -47,12 +49,11 @@ public class LightMixerController : MonoBehaviour
     private float goalColorValue;
     private float goalColorSaturation;
     private float currentColorValue;
-    private float currentColorSaturation;
-
     private float minColVal = 0.1f;
     private float maxColVal = 0.9f;
     private float startPercentage = 0;
     private Vector2 startPercPoint = new();
+    private Vector2 starColorPoint = new();
     private float firstSlope = 0f;
     private float secondSlope = 0f;
 
@@ -65,6 +66,10 @@ public class LightMixerController : MonoBehaviour
     //SpeedCalc
     private Vector3 previousPosition;
     private Vector3 currentPosition;
+    private Vector2 minPos;
+    private Vector2 maxPos;
+    private float line1Pos;
+    private float line2Pos;
 
     private void Awake()
     {
@@ -101,7 +106,10 @@ public class LightMixerController : MonoBehaviour
         // cutGameView.EndMinigame += EndCuttingMiniGame;
         colorFullDistance = Vector2.Distance(new Vector2(minColVal, maxColVal), new Vector2(maxColVal, minColVal));
 
-
+        minPos = new Vector2(minColVal, maxColVal);
+        maxPos = new Vector2(maxColVal, minColVal);
+        line1Pos = 1f;
+        line2Pos = 0f;
 
         // firstSlope = (maxColVal - startColorSaturation) / (minColVal - startColorValue);
         // secondSlope = (maxColVal- startColorSaturation) / ( minColVal - startColorValue);
@@ -118,6 +126,11 @@ public class LightMixerController : MonoBehaviour
         startColor = Color.white;
         finishedTrigger.enabled = false;
         receivedRank = false;
+        lightMixGameView.Reset();
+        if (currentMiniGameGO != null)
+        {
+            currentMiniGameGO.layer = 0;
+        }
     }
 
     private void StartLightMixingMiniGame()
@@ -140,7 +153,7 @@ public class LightMixerController : MonoBehaviour
         currentMiniGameGO.layer = 6;
 
         finishedTrigger.enabled = true;
-        
+
         SetUpGame();
     }
 
@@ -153,6 +166,7 @@ public class LightMixerController : MonoBehaviour
         startColorValue = colorVal;
         Vector2 maxV = new Vector2(maxColVal, minColVal);
         Vector2 minV = new Vector2(minColVal, maxColVal);
+        starColorPoint = new Vector2(startColorSaturation, startColorValue);
 
         firstSlope = (startColorSaturation - minColVal) / (startColorValue - maxColVal);
         secondSlope = (maxColVal - startColorSaturation) / (minColVal - startColorValue);
@@ -196,12 +210,13 @@ public class LightMixerController : MonoBehaviour
 
         var newSat = ReceiveSaturationFromValue(randomVal);
         goalColor = Color.HSVToRGB(colorHue, newSat, randomVal);
+        goalColorValue = randomVal;
+        goalColorSaturation = newSat;
 
-
-        lightMixGameView.SetUpDebug(startPercPoint, new Vector2(newSat, randomVal));
+        lightMixGameView.SetUpDebug(startPercPoint, new Vector2(newSat, randomVal), new Vector2(newSat, randomVal));
         lightMixGameView.SetUpView(startColor, goalColor);
 
-        
+
         //TODO dbg
         dbgCube.material.color = new Color(goalColor.r, goalColor.g, goalColor.b);
     }
@@ -210,7 +225,7 @@ public class LightMixerController : MonoBehaviour
     {
         var point = 0f;
         //Debug.Log("Val:" + val + " >= startColorSaturation " + startColorValue);
-        if (val*100f >= startColorValue*100f)
+        if (val * 100f >= startColorValue * 100f)
         {
             // Debug.Log("minColVal:"+minColVal+" <= startColorSaturation.y " + startColorSaturation);
             // Debug.Log($"{val}*{firstSlope} + {maxColVal}");
@@ -247,16 +262,41 @@ public class LightMixerController : MonoBehaviour
         {
             currentMixable.FluidColor = startColor;
         }
+        currentMixable.ActiveRigidbody(true);
+        currentMixable.Place(cancelledPlacement.position);
         receivedRank = false;
+
+        currentMixable = null;
+        currentMiniGameGO = null;
+        currentPickable = null;
     }
 
     private void FinishMiniGame()
     {
         Debug.Log("Calculation");
         currentColorValue = currentColorValue == 0f ? 0.01f : currentColorValue;
-        var rank = goalColorValue / currentColorValue;
-        Debug.Log($"Rank: {rank} (" + "ABCDEFGH"[(int)rank] + ")");
+        //var rank = goalColorValue / currentColorValue;
+        int rank = -1;
+        var rankCalc = Math.Abs(goalColorValue - currentColorValue);
+        Debug.Log($"RankCalc: { rankCalc} ({goalColorValue} - {currentColorValue} = {goalColorValue-currentColorValue})");
+        if(rankCalc <= perfectScoreMargin){
+            rank = 0;
+        }else{
+            rankCalc -= perfectScoreMargin;
+            for (int i = 0; i < maxRanks; i++)
+            {
+                rankCalc -= rankMargin;
+                if(rankCalc <= 0f){
+                    rank = i+1;
+                    break;
+                }
+            }
+        }
+        rank = rank == -1 ? maxRanks : rank;
+        Debug.Log($"Rank: {rank} (" + "ABCDEFGH"[rank] + ")");
         receivedRank = true;
+        currentMixable.Mix(rank);
+        lightMixGameView.DisplayRank("ABCDEFGH"[rank]+"");
     }
 
     void Update()
@@ -328,6 +368,8 @@ public class LightMixerController : MonoBehaviour
     {
         currentColor = new Color(currentMixable.FluidColor.r, currentMixable.FluidColor.g, currentMixable.FluidColor.b);
         Color.RGBToHSV(currentColor, out float newHue, out float newSat, out float newVal);
+       bool moveOnFirst;
+        Vector2 newPos = new();
         switch (currentMixingState)
         {
             case MixingState.Light:
@@ -336,24 +378,58 @@ public class LightMixerController : MonoBehaviour
                     newVal = 0.9f;
                     return;
                 }
-                newVal += addVal;
-                if (newVal >= maxColVal) newVal = maxColVal;
+                moveOnFirst = true;
+
+
+                if(line1Pos >= 1){
+                    if(line2Pos > 0){
+                        // line2Pos -= addVal;
+                        // line2Pos = line2Pos < 0f ? 0f: line2Pos;
+                        // newPos= Vector2.Lerp(startPercPoint, maxPos, line2Pos);   
+                        moveOnFirst = false;                     
+                    }else{
+                        moveOnFirst = true;
+                    }
+                }
+                //newVal += addVal;
+                //if (newVal >= maxColVal) newVal = maxColVal;
+
+
+                if(moveOnFirst){
+                    line1Pos -= addVal;
+                    line1Pos = line1Pos < 0f ? 0f: line1Pos;
+                    newPos= Vector2.Lerp(minPos, starColorPoint, line1Pos);
+                }else{
+                    line2Pos -= addVal;
+                    line2Pos = line2Pos < 0f ? 0f: line2Pos;
+                    newPos= Vector2.Lerp(starColorPoint, maxPos, line2Pos);    
+                }
                 break;
             case MixingState.Darkness:
 
-                if (newVal <= minColVal)
-                {
-                    newVal = 0.1f;
-                    return;
+                moveOnFirst = true;
+                if(line1Pos >= 1){                    
+                    moveOnFirst = false; 
                 }
-                newVal -= addVal;
-                if (newVal <= minColVal) newVal = minColVal;
+
+                if(moveOnFirst){
+                    line1Pos += addVal;
+                    line1Pos = line1Pos > 1f ? 1f: line1Pos;
+                    newPos= Vector2.Lerp(minPos, starColorPoint, line1Pos);
+                }else{
+                    line2Pos += addVal;
+                    line2Pos = line2Pos > 1f ? 1f: line2Pos;
+                    newPos= Vector2.Lerp(starColorPoint, maxPos, line2Pos);    
+                }               
                 break;
         }
-        var calcSat = ReceiveSaturationFromValue(newVal);
-        //TODO to debug
-        lightMixGameView.SetUpDebug(startPercPoint, new Vector2(calcSat, newVal));
-        Color newCol = Color.HSVToRGB(newHue, calcSat, newVal);
+        // var calcSat = ReceiveSaturationFromValue(newVal);
+        // //TODO to debug
+        // lightMixGameView.SetUpDebug(startPercPoint, new Vector2(calcSat, newVal), new Vector2(goalColorSaturation, goalColorValue));
+         lightMixGameView.SetUpDebug(startPercPoint, newPos, new Vector2(goalColorSaturation, goalColorValue));
+
+        Color newCol = Color.HSVToRGB(newHue, newPos.x, newPos.y);
+        currentColorValue = newVal;
         currentMixable.FluidColor = newCol;
     }
 
