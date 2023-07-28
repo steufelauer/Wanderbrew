@@ -26,15 +26,21 @@ public class LightMixGameView : MiniGameView
 
     private Color ingredientColor;    
     private Color goalColor;    
-    private LightMixerController controller;    
-    public LightMixerController Controller { get => controller; set => controller = value; }
 
     private bool useDBG = true;
 
     public event Action OnFinishConfirmed = delegate {} ;
 
 
-
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+    
+    protected override void Start()
+    {
+        base.Start();
+    }
     public void SetUpView(Color ingredientColor, Color goalColor){
 
         this.ingredientColor = ingredientColor;
@@ -57,9 +63,7 @@ public class LightMixGameView : MiniGameView
         }
     }
 
-    public void SetUpDebug(Vector2 perc, Vector2 calc, Vector2 goal){
-        Debug.Log("SetupDebug perc:" + perc +" calc: " +calc);
-        DbgPointPlacement.rectTransform.localPosition = new Vector3(perc.x*100, perc.y*100, 0);
+    public void SetUpDebug(Vector2 calc, Vector2 goal){
         DbgNewValPlacement.rectTransform.localPosition = new Vector3(calc.x*100, calc.y*100, 0);
         DbgGoalPlacement.rectTransform.localPosition = new Vector3(goal.x*100, goal.y*100, 0);
 
@@ -72,8 +76,8 @@ public class LightMixGameView : MiniGameView
         //DBG SetUp(ingredientColor);
     }
 
-    public void Reset(){
-
+    public override void Reset(){
+        base.Reset();
     }
 
     public void DisplayFinishConfirmation(bool enable){
@@ -128,7 +132,4 @@ public class LightMixGameView : MiniGameView
         rect.rotation = Quaternion.Euler(new Vector3(0, 0, 180 * Mathf.Atan(dif.y / dif.x) / Mathf.PI));
 
     }
-
-
-
 }

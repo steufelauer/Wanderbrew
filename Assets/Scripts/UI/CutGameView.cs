@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CutGameView : MonoBehaviour
+public class CutGameView : MiniGameView
 {
     //TODO take into account that the start line point of the user can be on bottom as well, not only top
     [Serializable]
@@ -37,16 +37,15 @@ public class CutGameView : MonoBehaviour
     [SerializeField] private Image DbgPerfectRank;
     [SerializeField] private List<Image> DbgRanks = new();
 
-    public event Action EndMinigame = delegate { };
+    // public event Action EndMinigame = delegate { };
+    public CuttingboardController Controller { get => controller; set => controller = value; }
+    private CuttingboardController controller;
 
     private Vector3 currentGoalTopPoint;
     private Vector3 currentGoalBotPoint;
     private Vector3 currentMouseStartPoint;
     private Vector3 currentMouseEndPoint;
 
-    private Canvas canvas;
-    private CanvasGroup canvasGroup;
-    private CuttingboardController controller;
 
     //DBG
     private int dbgPerfectScore;
@@ -55,21 +54,20 @@ public class CutGameView : MonoBehaviour
 
 
     //TODO service?
-    public CuttingboardController Controller { get => controller; set => controller = value; }
-
-    void Start()
+    protected override void Awake()
     {
-        canvas = this.gameObject.GetComponentInParent<Canvas>();
-        canvasGroup = this.gameObject.GetComponent<CanvasGroup>();
-        //Debug.Log($"Found canvas? ={canvas}");
+        base.Awake();
+    }
 
+    protected override void Start()
+    {
+        base.Start();
         if (DbgRanks.Count < 1)
         {
             DbgRanks.Add(DbgPerfectRank);
         }
         SetDbgImages();
         Reset();
-
     }
 
     // Update is called once per frame
@@ -96,8 +94,9 @@ public class CutGameView : MonoBehaviour
         }
     }
 
-    public void Reset()
+    public override void Reset()
     {
+        base.Reset();
         cutRankText.text = "";
         finalRankText.text = "";
         ReturnButton.gameObject.SetActive(false);
@@ -138,20 +137,6 @@ public class CutGameView : MonoBehaviour
         DrawMouseLine();
         var topInput = currentMouseStartPoint.y <= currentMouseEndPoint.y ? currentMouseStartPoint : currentMouseEndPoint;
         var botInput = currentMouseStartPoint.y <= currentMouseEndPoint.y ? currentMouseEndPoint : currentMouseStartPoint;
-        // if (currentMouseStartPoint.y <= currentMouseEndPoint.y)
-        // {
-        //     controller.CalculatePercentOverlap(currentGoalTopPoint, currentGoalBotPoint, currentMouseEndPoint, currentMouseStartPoint);
-
-        // var topInput = currentMouseStartPoint;
-        // var botInput = currentMouseEndPoint;
-        // }
-        // else
-        // {
-        //     controller.CalculatePercentOverlap(currentGoalTopPoint, currentGoalBotPoint, currentMouseStartPoint, currentMouseEndPoint);
-
-        // var topInput = currentMouseStartPoint;
-        // var botInput = currentMouseEndPoint;
-        // }
         if(topInput.x == botInput.x){
             Debug.LogError($"[CutGameView::SetMouseEndPoint] Division 0 prevented from x calculation, changing point");
             botInput = new Vector3(botInput.x + 1f, botInput.y, 0);
@@ -163,9 +148,6 @@ public class CutGameView : MonoBehaviour
             Debug.LogError($"[CutGameView::SetMouseEndPoint] Division 0 prevented from slope, changing slope");
             slope = 0.01f;
         }
-        // Debug.Log("Slope:" + slope);
-        // Debug.Log($"Slope:  ({topInput.y} - {botInput.y}) /  ({topInput.x} - {botInput.x})");
-        // Debug.Log("Slope:" + (topInput.y - botInput.y)+ " / " + (topInput.x - botInput.x));
         var topX = (currentGoalTopPoint.y - topInput.y) / slope + topInput.x;
         var botX = (currentGoalBotPoint.y - botInput.y) / slope + botInput.x;
 
@@ -275,38 +257,18 @@ public class CutGameView : MonoBehaviour
         lineImage.gameObject.SetActive(enable);
         mouseLineImage.gameObject.SetActive(enable);
     }
-    public void EnableCanvasGroup(bool enable)
-    {
-        if (enable)
-        {
-            canvasGroup.alpha = 1;
-            canvasGroup.interactable = true;
-        }
-        else
-        {
-            canvasGroup.alpha = 0;
-            canvasGroup.interactable = false;
-        }
-    }
-    public void EndBtn() => EndMinigame();
 
 
     public void DrawLine(Image img, Vector3 top, Vector3 bot)
     {
-        //lineImage.sprite = lineImage;
-        //lineImage.color = col;
         RectTransform rect = img.GetComponent<RectTransform>();
-        //rect.SetParent(transform);
         rect.localScale = Vector3.one;
 
-        // Vector3 a = new Vector3(ax*graphScale.x, ay*graphScale.y, 0);
-        // Vector3 b = new Vector3(bx*graphScale.x, by*graphScale.y, 0);
         Vector3 a = new Vector3(top.x, top.y, 0);
         Vector3 b = new Vector3(bot.x, bot.y, 0);
 
         Debug.Log($"A={a}, B={b}");
         rect.localPosition = a.x <= b.x ? a : b;
-        //rect.localPosition = a;
         Vector3 dif = a - b;
 
         if(dif.x == 0){
@@ -317,8 +279,6 @@ public class CutGameView : MonoBehaviour
         rect.sizeDelta = new Vector3(dif.magnitude, 5f);
         rect.rotation = Quaternion.Euler(new Vector3(0, 0, 180 * Mathf.Atan(dif.y / dif.x) / Mathf.PI));
 
-        // rect.anchorMin = Vector2.zero;
-        // rect.anchorMax = Vector2.zero;
     }
 
     public void DisplayFinalRank(string content)

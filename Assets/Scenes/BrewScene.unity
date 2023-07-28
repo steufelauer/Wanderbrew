@@ -540,82 +540,6 @@ RectTransform:
   m_AnchoredPosition: {x: 587.80005, y: 280.2}
   m_SizeDelta: {x: 1175.6001, y: 560.4}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &104578724
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 104578725}
-  - component: {fileID: 104578727}
-  - component: {fileID: 104578726}
-  m_Layer: 5
-  m_Name: PointPlacement
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &104578725
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 104578724}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1531959221}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5, y: 5}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &104578726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 104578724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &104578727
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 104578724}
-  m_CullTransparentMesh: 1
 --- !u!1 &118578371
 GameObject:
   m_ObjectHideFlags: 0
@@ -5096,10 +5020,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ac8ae5286d39e248baeabc6d8bf1f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightMixGameView: {fileID: 1549192627}
+  gameView: {fileID: 1549192627}
   mainCamera: {fileID: 963194227}
   miniGameCamera: {fileID: 1471489688}
   startPlacement: {fileID: 432022739}
+  perfectScoreMargin: 0.05
+  rankMargin: 0.025
+  maxRanks: 3
   cancelledPlacement: {fileID: 11392288}
   backgroundPlane: {fileID: 1501036356}
   movementPlane: {fileID: 40242412}
@@ -5107,9 +5034,6 @@ MonoBehaviour:
   lightCollider: {fileID: 6179467204016381395}
   darknessCollider: {fileID: 1990931570}
   dbgCube: {fileID: 118578374}
-  perfectScoreMargin: 0.05
-  rankMargin: 0.025
-  maxRanks: 3
 --- !u!65 &1029982155
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5362,12 +5286,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1531959221}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5, y: 5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 10.5, y: 10.5}
+  m_SizeDelta: {x: 7, y: 7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1132296551
 MonoBehaviour:
@@ -5382,7 +5306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3562289, g: 0.6132076, b: 0.34941262, a: 1}
+  m_Color: {r: 0.735849, g: 0.14855818, b: 0.27892813, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7189,13 +7113,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1efe209a1ad6d84a852e79851effea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cutGameView: {fileID: 1818927375}
+  gameView: {fileID: 1818927375}
   mainCamera: {fileID: 963194227}
   miniGameCamera: {fileID: 1791519751}
-  roundCount: 5
+  startPlacement: {fileID: 1357982261}
   perfectScoreMargin: 5
   rankMargin: 10
   maxRanks: 3
+  roundCount: 5
 --- !u!1 &1531959220
 GameObject:
   m_ObjectHideFlags: 0
@@ -7228,9 +7153,8 @@ RectTransform:
   - {fileID: 1255219016}
   - {fileID: 1307571761}
   - {fileID: 149769105}
-  - {fileID: 104578725}
-  - {fileID: 747553945}
   - {fileID: 1132296550}
+  - {fileID: 747553945}
   m_Father: {fileID: 562085602}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7314,7 +7238,7 @@ MonoBehaviour:
   DbgLineTop: {fileID: 1255219017}
   DbgLineBot: {fileID: 1307571762}
   DbgLineDistance: {fileID: 149769106}
-  DbgPointPlacement: {fileID: 104578726}
+  DbgPointPlacement: {fileID: 0}
   DbgNewValPlacement: {fileID: 747553946}
   DbgGoalPlacement: {fileID: 1132296551}
 --- !u!1001 &1551106325

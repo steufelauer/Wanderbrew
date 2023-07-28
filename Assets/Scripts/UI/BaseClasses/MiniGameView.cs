@@ -13,13 +13,14 @@ public class MiniGameView : MonoBehaviour
     private Canvas canvas;
     private CanvasGroup canvasGroup;
 
-
-    void Start()
+    protected virtual void Awake()
     {
+
         canvas = this.gameObject.GetComponentInParent<Canvas>();
         canvasGroup = this.gameObject.GetComponent<CanvasGroup>();
-        //Debug.Log($"Found canvas? ={canvas}");
-
+    }
+    protected virtual void Start()
+    {
     }
 
     public void EndBtn() => EndMinigame();
@@ -36,6 +37,10 @@ public class MiniGameView : MonoBehaviour
             canvasGroup.alpha = 0;
             canvasGroup.interactable = false;
         }
+    }
+
+    public virtual void Reset()
+    {
     }
 
 }
