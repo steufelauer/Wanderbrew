@@ -267,7 +267,6 @@ public class CutGameView : MiniGameView
         Vector3 a = new Vector3(top.x, top.y, 0);
         Vector3 b = new Vector3(bot.x, bot.y, 0);
 
-        Debug.Log($"A={a}, B={b}");
         rect.localPosition = a.x <= b.x ? a : b;
         Vector3 dif = a - b;
 
