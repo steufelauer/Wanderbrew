@@ -15,11 +15,13 @@ public class InteractionHighlighter : MonoBehaviour
 
     IGameStateService gameStateService;
     protected IServiceLocator serviceLocator;
-    
-    Plane plane = new Plane(Vector3.up, Vector3.up*3f);
+    int layerMask = 1 << 6;
 
-    private void Awake() {
-        
+    Plane plane = new Plane(Vector3.up, Vector3.up * 3f);
+
+    private void Awake()
+    {
+
         serviceLocator = ServiceLocatorProvider.GetServiceLocator();
         gameStateService = serviceLocator.GetService<IGameStateService>();
     }
@@ -46,21 +48,33 @@ public class InteractionHighlighter : MonoBehaviour
 
         Ray forwardRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (!Physics.Raycast(forwardRay, out hit, 100))
+        if (!Physics.Raycast(forwardRay, out hit, 100, layerMask))
         {
+            DisableCurrentHoverable();
             return;
-
         }
 
         UpdateHoverable(hit);
     }
 
-    public void UpdateHoverable(RaycastHit hit){
-        if(!hoverableEnabled)
+    public void DisableCurrentHoverable()
+    {
+        if (currentHoverable != null)
         {
-            if(currentHoverable != null){
+            currentHoverable.DisableHover();
+            currentHoverable= null;
+        }
+    }
+
+    public void UpdateHoverable(RaycastHit hit)
+    {
+        if (!hoverableEnabled)
+        {
+            if (currentHoverable != null)
+            {
                 Debug.Log("Disabling hover");
                 currentHoverable.DisableHover();
+                currentHoverable = null;
             }
             return;
         }

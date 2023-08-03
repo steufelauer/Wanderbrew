@@ -108,7 +108,7 @@ public class LightMixerController : MiniGameController
         receivedRank = false;
         if (currentMiniGameGO != null)
         {
-            currentMiniGameGO.layer = 0;
+            currentMiniGameGO.layer = 6;
         }
     }
 
@@ -130,7 +130,7 @@ public class LightMixerController : MiniGameController
         lightMixGameView.EnableCanvasGroup(true);
 
         gameStateService.ChangeState(GameState.Minigame);
-        currentMiniGameGO.layer = 6;
+        currentMiniGameGO.layer = 7;
 
         finishedTrigger.enabled = true;
 
@@ -193,7 +193,7 @@ public class LightMixerController : MiniGameController
         darknessCollider.gameObject.SetActive(false);
         miniGameStarted = false;
         if(currentMiniGameGO != null){
-            currentMiniGameGO.layer = 0;
+            currentMiniGameGO.layer = 6;
         }
 
         finishedTrigger.enabled = false;
