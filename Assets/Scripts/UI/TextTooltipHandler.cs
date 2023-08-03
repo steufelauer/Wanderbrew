@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TextTooltipHandler : MonoBehaviour
 {
     [SerializeField] private GameObject textTooltipRoot;
     [SerializeField] private TMPro.TMP_Text textTooltipText;
+    [SerializeField] private GameObject aspectTooltipRoot;
+    [SerializeField] private TMPro.TMP_Text aspectTooltipText;
+    [SerializeField] private Image aspectTooltipImg;
 
 
     public void ShowTooltip(string txt, Vector3 pos)
@@ -14,13 +18,13 @@ public class TextTooltipHandler : MonoBehaviour
         textTooltipRoot.gameObject.transform.position = pos + (Vector3.up * 2f);
         //UnityEngine.Debug.Log($"Showing tooltip {txt}, moved to {pos} ");
         textTooltipRoot.SetActive(true);
+        aspectTooltipRoot.SetActive(false);
     }
-    public void ShowAspectTooltip(string txt, List<AspectDetail> details, Vector3 pos)
+    public void ShowAspectTooltip(string txt, IngredientAspect detail, Vector3 pos)
     {
-        textTooltipText.text = txt;
-        textTooltipRoot.gameObject.transform.position = pos + (Vector3.up * 2f);
-        //UnityEngine.Debug.Log($"Showing tooltip {txt}, moved to {pos} ");
-        textTooltipRoot.SetActive(true);
+        ShowTooltip(txt, pos);
+        aspectTooltipRoot.SetActive(true);
+        aspectTooltipText.text = detail.Points.ToString();
     }
 
     public void HideToolTip()
