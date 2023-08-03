@@ -18,8 +18,10 @@ public class Flask : Ingredient, ILightMixable
             fluidMesh.material.color = fluidColor;
         }
     }
+    
 
     public bool IsMixed => isMixed;
+    protected override bool IsPrepared => IsMixed;
 
     private bool isMixed;
     private GameObject currentActiveObject;
@@ -32,11 +34,21 @@ public class Flask : Ingredient, ILightMixable
     }
 
 
-    public void Mix(int rank)
+    public void Mix(int rank, int maxRanks)
     {
         //Debug.Log($"[Herb::Flask] is already cut = {isMixed}");
         if (isMixed) return;
         isMixed = true;
+        //rank 1, 2, 4, 5
+
+        reachedAspectDetail.Aspect = baseAspectDetail.Aspect;
+        reachedAspectDetail.Points = baseAspectDetail.Points - (baseAspectDetail.Points / maxRanks * rank);
+        //10
+        // rank 1 -> 10
+        //rank 5 -> 2
+        //10/5 -> 2
+        //
+    
     }
 
     public void ActiveRigidbody(bool activate)

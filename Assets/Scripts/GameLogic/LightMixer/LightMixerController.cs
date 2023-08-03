@@ -217,7 +217,8 @@ public class LightMixerController : MiniGameController
     {
         int rank = CalculateRank();
         receivedRank = true;
-        currentMixable.Mix(rank);
+        miniGameStarted = false;
+        currentMixable.Mix(rank, maxRanks);
         lightMixGameView.DisplayRank("ABCDEFGH"[rank]+"");
     }
 

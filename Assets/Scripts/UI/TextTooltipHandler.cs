@@ -24,7 +24,7 @@ public class TextTooltipHandler : MonoBehaviour
     {
         ShowTooltip(txt, pos);
         aspectTooltipRoot.SetActive(true);
-        aspectTooltipText.text = detail.Points.ToString();
+        aspectTooltipText.text = detail.Points.ToString("0.##");
     }
 
     public void HideToolTip()

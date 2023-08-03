@@ -8,13 +8,13 @@ public class Herb : Ingredient, ICutable
     [SerializeField] private GameObject originalHerb;
     [SerializeField] private List<GameObject> cutHerbs;
 
+    protected override bool IsPrepared => isCut;
     public bool IsCut => isCut;
-
     private bool isCut;
     private GameObject currentActiveObject;
 
 
-    public void Cut(int rank){
+    public void Cut(int rank, int maxRanks){
         Debug.Log($"[Herb::Cut] is already cut = {isCut}");
         if(isCut) return;
         originalHerb.SetActive(false);
@@ -26,6 +26,8 @@ public class Herb : Ingredient, ICutable
         cutHerbs[rank].SetActive(true);
         currentActiveObject = cutHerbs[rank];
         isCut = true;
+        
+        reachedAspectDetail.Points = baseAspectDetail.Points - (baseAspectDetail.Points / maxRanks * rank);
     }
 
     public void Place(Vector3 position){
