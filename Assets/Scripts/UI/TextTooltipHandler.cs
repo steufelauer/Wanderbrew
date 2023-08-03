@@ -15,6 +15,13 @@ public class TextTooltipHandler : MonoBehaviour
         //UnityEngine.Debug.Log($"Showing tooltip {txt}, moved to {pos} ");
         textTooltipRoot.SetActive(true);
     }
+    public void ShowAspectTooltip(string txt, List<AspectDetail> details, Vector3 pos)
+    {
+        textTooltipText.text = txt;
+        textTooltipRoot.gameObject.transform.position = pos + (Vector3.up * 2f);
+        //UnityEngine.Debug.Log($"Showing tooltip {txt}, moved to {pos} ");
+        textTooltipRoot.SetActive(true);
+    }
 
     public void HideToolTip()
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 public struct Recipe 
 {
     // Start is called before the first frame update
-    [SerializeField] private string recipeName;
-    [SerializeField] private List<IngredientAspect> neededAspects;
-    [SerializeField] private GameObject resultingObject;    
+    [SerializeField] public string RecipeName;
+    [SerializeField] public List<IngredientAspect> NeededAspects;
+    [SerializeField] public GameObject ResultingObject;    
 }

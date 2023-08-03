@@ -6,8 +6,8 @@ using UnityEngine;
 public class IngredientAspect 
 {
     // Start is called before the first frame update
-    [SerializeField] private AspectAlignment aspect;
-    [SerializeField] private float points;
+    [SerializeField] public AspectAlignment Aspect;
+    [SerializeField] public float Points;
 
 
     

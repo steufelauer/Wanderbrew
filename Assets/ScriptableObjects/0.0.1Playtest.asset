@@ -14,25 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabName: FirstPlayableBuild
   myRecipes:
-  - recipeName: Heal Minor
-    neededAspects:
-    - aspect: 1
-      points: 2
-    resultingObject: {fileID: 0}
-  - recipeName: Heal Major
-    neededAspects:
-    - aspect: 1
-      points: 10
-    resultingObject: {fileID: 0}
-  - recipeName: Poison Minor
-    neededAspects:
-    - aspect: 2
-      points: 5
-    resultingObject: {fileID: 0}
-  - recipeName: Antidote
-    neededAspects:
-    - aspect: 2
-      points: 2
-    - aspect: 1
-      points: 5
-    resultingObject: {fileID: 0}
+  - RecipeName: Minor Healing Potion
+    NeededAspects:
+    - Aspect: 1
+      Points: 2
+    ResultingObject: {fileID: 0}
+  - RecipeName: Powerful Healing Potion
+    NeededAspects:
+    - Aspect: 1
+      Points: 10
+    ResultingObject: {fileID: 0}
+  - RecipeName: Strong Poison
+    NeededAspects:
+    - Aspect: 2
+      Points: 5
+    ResultingObject: {fileID: 0}
+  - RecipeName: Antidote
+    NeededAspects:
+    - Aspect: 2
+      Points: 2
+    - Aspect: 1
+      Points: 5
+    ResultingObject: {fileID: 0}
