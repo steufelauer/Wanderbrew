@@ -9,12 +9,14 @@ public class AspectDetail : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private Image aspectImg;
-    [SerializeField] private TMP_Text aspectCount;
+    [SerializeField] private Image aspectImgBG;
 
     internal void SetUp(AspectAlignment aspect, float points)
     {
-        //TODO image <-> aspect
-        aspectCount.text = points.ToString();
+        aspectImg.sprite = SpriteManager.GetSpriteByAspect(aspect);
+        aspectImgBG.sprite = SpriteManager.GetSpriteByAspect(aspect);
+
+        aspectImg.fillAmount = points/10f;
     }
 
     void Start()

@@ -8,8 +8,9 @@ public class TextTooltipHandler : MonoBehaviour
     [SerializeField] private GameObject textTooltipRoot;
     [SerializeField] private TMPro.TMP_Text textTooltipText;
     [SerializeField] private GameObject aspectTooltipRoot;
-    [SerializeField] private TMPro.TMP_Text aspectTooltipText;
     [SerializeField] private Image aspectTooltipImg;
+    [SerializeField] private Image aspectTooltipImgBG;
+    [SerializeField] private Image aspectTooltipImgReached;
 
 
     public void ShowTooltip(string txt, Vector3 pos)
@@ -20,11 +21,17 @@ public class TextTooltipHandler : MonoBehaviour
         textTooltipRoot.SetActive(true);
         aspectTooltipRoot.SetActive(false);
     }
-    public void ShowAspectTooltip(string txt, IngredientAspect detail, Vector3 pos)
+    public void ShowAspectTooltip(string txt, IngredientAspect detail, float reached, Vector3 pos)
     {
         ShowTooltip(txt, pos);
         aspectTooltipRoot.SetActive(true);
-        aspectTooltipText.text = detail.Points.ToString("0.##");
+        //aspectTooltipText.text = detail.Points.ToString("0.##");
+        aspectTooltipImg.sprite = SpriteManager.GetSpriteByAspect(detail.Aspect);
+        aspectTooltipImgBG.sprite = SpriteManager.GetSpriteByAspect(detail.Aspect);
+        aspectTooltipImgReached.sprite = SpriteManager.GetSpriteByAspect(detail.Aspect);
+
+        aspectTooltipImg.fillAmount = detail.Points/10f;
+        aspectTooltipImgReached.fillAmount = reached/10f;
     }
 
     public void HideToolTip()

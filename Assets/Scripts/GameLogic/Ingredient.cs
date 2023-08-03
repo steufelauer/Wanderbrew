@@ -59,11 +59,11 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
         tooltipProvider.ShowTextToolTip(txt, pos);
         if (IsPrepared)
         {
-            tooltipProvider.ShowAspectTextToolTip("Prepared " + txt, reachedAspectDetail, pos);
+            tooltipProvider.ShowAspectTextToolTip("Prepared " + txt, baseAspectDetail, reachedAspectDetail.Points, pos);
         }
         else
         {
-            tooltipProvider.ShowAspectTextToolTip(txt, baseAspectDetail, pos);
+            tooltipProvider.ShowAspectTextToolTip(txt, baseAspectDetail, 0f, pos);
         }
     }
 

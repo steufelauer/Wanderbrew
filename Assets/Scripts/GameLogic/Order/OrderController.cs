@@ -7,8 +7,9 @@ using UnityEngine;
 public class OrderController : MonoBehaviour
 {
 
-    [SerializeField] private OrderView orderView;    
-    [SerializeField] private RecipesScriptableObject activeOrders;    
+    [SerializeField] private OrderView orderView;
+    [SerializeField] private RecipesScriptableObject activeOrders;
+    [SerializeField] private bool enableAll = true;
     private IServiceLocator serviceLocator;
     private TooltipProvider tooltipProvider;
     private IUIProviderService uIProviderService;
@@ -16,14 +17,24 @@ public class OrderController : MonoBehaviour
 
     private Recipe currentOrder;
 
-    private void Awake() {
-        
+    private void Awake()
+    {
+
     }
-    private void Start() {
+    private void Start()
+    {
         ActivateOrder(0);
+        if (enableAll)
+        {
+            for (int i = 1; i < activeOrders.myRecipes.Count; i++)
+            {
+                ActivateOrder(i);
+            }
+        }
     }
 
-    private void ActivateOrder(int recipeNr = -1){
+    private void ActivateOrder(int recipeNr = -1)
+    {
         orderView.DisplayOrder(activeOrders.myRecipes[recipeNr]);
     }
 }
