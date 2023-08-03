@@ -66,7 +66,8 @@ public class CutGameView : MiniGameView
         {
             DbgRanks.Add(DbgPerfectRank);
         }
-        SetDbgImages();
+
+        EnableDBG(false);
         Reset();
     }
 
@@ -76,23 +77,6 @@ public class CutGameView : MiniGameView
 
     }
 
-    private void SetDbgImages()
-    {
-        linePoints.TopLeft.GetComponent<Image>().enabled = useDBG;
-        linePoints.TopRight.GetComponent<Image>().enabled = useDBG;
-        linePoints.BottomLeft.GetComponent<Image>().enabled = useDBG;
-        linePoints.BottomRight.GetComponent<Image>().enabled = useDBG;
-        DbgLineTop.GetComponent<Image>().enabled = useDBG;
-        DbgLineBot.GetComponent<Image>().enabled = useDBG;
-        DbgPerfectRank.GetComponent<Image>().enabled = useDBG;
-        mouseStartPoint.GetComponent<Image>().enabled = useDBG;
-        mouseEndPoint.GetComponent<Image>().enabled = useDBG;
-        
-        foreach (var image in DbgRanks)
-        {
-            image.GetComponent<Image>().enabled = useDBG;
-        }
-    }
 
     public override void Reset()
     {
@@ -134,6 +118,11 @@ public class CutGameView : MiniGameView
     
         mouseEndPoint.transform.position = pos;
         currentMouseEndPoint = pos;
+        if(currentMouseStartPoint.x == currentMouseEndPoint.x && currentMouseStartPoint.y == currentMouseEndPoint.y)
+        {            
+            Debug.LogError($"[CutGameView::SetMouseEndPoint]Click detected, ignoring");
+            return;
+        }
         DrawMouseLine();
         var topInput = currentMouseStartPoint.y <= currentMouseEndPoint.y ? currentMouseStartPoint : currentMouseEndPoint;
         var botInput = currentMouseStartPoint.y <= currentMouseEndPoint.y ? currentMouseEndPoint : currentMouseStartPoint;
@@ -227,6 +216,32 @@ public class CutGameView : MiniGameView
             break;
         }
     }
+
+    public void ToggleDBG()
+    {
+        Debug.Log("ToggleDBG");
+        EnableDBG(!useDBG);
+    }
+
+    public void EnableDBG(bool enable){
+        useDBG = enable;
+
+        linePoints.TopLeft.GetComponent<Image>().enabled = useDBG;
+        linePoints.TopRight.GetComponent<Image>().enabled = useDBG;
+        linePoints.BottomLeft.GetComponent<Image>().enabled = useDBG;
+        linePoints.BottomRight.GetComponent<Image>().enabled = useDBG;
+        DbgLineTop.GetComponent<Image>().enabled = useDBG;
+        DbgLineBot.GetComponent<Image>().enabled = useDBG;
+        DbgPerfectRank.GetComponent<Image>().enabled = useDBG;
+        mouseStartPoint.GetComponent<Image>().enabled = useDBG;
+        mouseEndPoint.GetComponent<Image>().enabled = useDBG;
+        
+        foreach (var image in DbgRanks)
+        {
+            image.GetComponent<Image>().enabled = useDBG;
+        }
+    }
+
 
     public void DrawRandomLine()
     {

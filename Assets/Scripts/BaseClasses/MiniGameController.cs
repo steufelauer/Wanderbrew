@@ -33,10 +33,7 @@ public abstract class MiniGameController : MonoBehaviour
         gameView.EndMinigame += EndMiniGame;
     }
 
-    ~MiniGameController()
-    {
-        gameView.EndMinigame -= EndMiniGame;
-    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -47,6 +44,12 @@ public abstract class MiniGameController : MonoBehaviour
     {
         miniGameStarted = false;
         gameView.Reset();
+    }
+
+    protected void OnDestroy()
+    {
+        Debug.Log("MG Controller OnDestroy");
+        gameView.EndMinigame -= EndMiniGame;
     }
 
     protected virtual void StartMiniGame()

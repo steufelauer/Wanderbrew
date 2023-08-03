@@ -7289,6 +7289,8 @@ GameObject:
   - component: {fileID: 1549192625}
   - component: {fileID: 1549192627}
   - component: {fileID: 1549192626}
+  - component: {fileID: 1549192629}
+  - component: {fileID: 1549192628}
   m_Layer: 5
   m_Name: LightMixMiniGame
   m_TagString: Untagged
@@ -7328,7 +7330,7 @@ CanvasGroup:
   m_GameObject: {fileID: 1549192624}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &1549192627
@@ -7359,6 +7361,44 @@ MonoBehaviour:
   DbgPointPlacement: {fileID: 0}
   DbgNewValPlacement: {fileID: 747553946}
   DbgGoalPlacement: {fileID: 1132296551}
+--- !u!114 &1549192628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549192624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &1549192629
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549192624}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1001 &1551106325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9061,6 +9101,8 @@ GameObject:
   - component: {fileID: 1818927374}
   - component: {fileID: 1818927375}
   - component: {fileID: 1818927376}
+  - component: {fileID: 1818927378}
+  - component: {fileID: 1818927377}
   m_Layer: 5
   m_Name: CutMiniGame
   m_TagString: Untagged
@@ -9158,6 +9200,44 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1818927377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818927373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &1818927378
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818927373}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1822881095
 GameObject:
   m_ObjectHideFlags: 0
@@ -10719,6 +10799,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseMiniGameUI
       objectReference: {fileID: 0}
+    - target: {fileID: 3995414600577638283, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995414600577638283, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995414600577638283, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1818927375}
+    - target: {fileID: 3995414600577638283, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995414600577638283, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleDBG
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995414600577638283, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CutGameView, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995414600577638283, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4456536217918749477, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -10741,7 +10849,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4456536217918749477, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: CutGameView, Assembly-CSharp
+      value: MiniGameView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4456536217918749477, guid: d0279f1261529a848ad7507bee632c8d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

@@ -30,31 +30,18 @@ public class CuttingboardController : MiniGameController
     protected override void Awake()
     {
         base.Awake();
-        // serviceLocator = ServiceLocatorProvider.GetServiceLocator();
-        // gameStateService = serviceLocator.GetService<IGameStateService>();
         perfectScoreMarginInt = (int)perfectScoreMargin;
         rankMarginInt = (int)rankMargin;
     }
 
-    ~CuttingboardController()
-    {
-
-        cutGameView.EndMinigame -= EndCuttingMiniGame;
-    }
-    // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        //TODO service?
         cutGameView = gameView as CutGameView;
         cutGameView.Controller = this;
         cutGameView.InitiatePointCondition(perfectScoreMarginInt, rankMarginInt, maxRanks);
-        //StartCuttingMiniGame();
-
-        cutGameView.EndMinigame += EndCuttingMiniGame;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!miniGameStarted || !waitingForInput) return;
@@ -66,11 +53,11 @@ public class CuttingboardController : MiniGameController
         {
             cutGameView.SetMouseEndPoint(Input.mousePosition);
         }
-
     }
 
     private void StartCuttingMiniGame()
     {
+        Debug.Log("StartMinigame");
         Reset();
         miniGameStarted = true;
         mainCamera.gameObject.SetActive(false);
@@ -81,6 +68,7 @@ public class CuttingboardController : MiniGameController
         cutGameView.EnableLines(true);
         gameStateService.ChangeState(GameState.Minigame);
     }
+
     protected override void Reset()
     {
         base.Reset();
@@ -90,18 +78,11 @@ public class CuttingboardController : MiniGameController
         waitingForInput = false;
     }
 
-    private void EndCuttingMiniGame()
-    {
-        miniGameCamera.gameObject.SetActive(false);
-        mainCamera.gameObject.SetActive(true);
-        //ranks.Clear();
-        //StartRound();
-        cutGameView.EnableCanvasGroup(false);
+    protected override void EndMiniGame(){
+        base.EndMiniGame();
+         Debug.Log("CuttingBoardEndMinigame");
         Reset();
-
-        gameStateService.ChangeState(GameState.Main);
     }
-
 
     public int CalculatePercentOverlap(Vector3 topGoal, Vector3 botGoal, Vector3 topReached, Vector3 botReached, float lineLength)
     {
@@ -231,8 +212,6 @@ public class CuttingboardController : MiniGameController
         cutGameView.EnableLines(false);
     }
 
-
-
     private void OnCollisionEnter(Collision other)
     {
         if (miniGameStarted) return;
@@ -260,7 +239,6 @@ public class CuttingboardController : MiniGameController
         else
         {
             Debug.Log($"[Cuttingboard:OnCollisionEnter] already cut");
-
         }
     }
 }

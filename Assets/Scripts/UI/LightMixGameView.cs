@@ -119,19 +119,10 @@ public class LightMixGameView : MiniGameView
         timerImageOut.enabled = display;
     }
 
-    // public void FinishConfirmed()
-    // {
-    //     DisplayFinishConfirmation(false);
-    //     OnFinishConfirmed();
-    // }
-    // public void FinishedDeclined()
-    // {
-    //     DisplayFinishConfirmation(false);
-    // }
-
     public void ToggleDBG(){
         EnableDBG(!useDBG);
     }
+
 
     private void EnableDBG(bool enable){
         useDBG = enable;

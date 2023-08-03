@@ -90,7 +90,6 @@ public class LightMixerController : MiniGameController
     {
         base.Start();
 
-
         colorFullDistance = Vector2.Distance(new Vector2(minColVal, maxColVal), new Vector2(maxColVal, minColVal));
 
         minPos = new Vector2(minColVal, maxColVal);
@@ -182,6 +181,8 @@ public class LightMixerController : MiniGameController
 
     protected override void EndMiniGame()
     {
+        
+        Debug.Log("LightMixing EndMinigame");
         base.EndMiniGame();
         backgroundPlane.SetActive(false);
         mainCamera.gameObject.SetActive(true);
@@ -191,7 +192,9 @@ public class LightMixerController : MiniGameController
         lightCollider.gameObject.SetActive(false);
         darknessCollider.gameObject.SetActive(false);
         miniGameStarted = false;
-        currentMiniGameGO.layer = 0;
+        if(currentMiniGameGO != null){
+            currentMiniGameGO.layer = 0;
+        }
 
         finishedTrigger.enabled = false;
 
