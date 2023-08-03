@@ -158,7 +158,7 @@ public class LightMixerController : MiniGameController
         goalColorValue = randomVal;
         goalColorSaturation = newSat;
 
-        lightMixGameView.SetUpDebug(new Vector2(newSat, randomVal), new Vector2(newSat, randomVal));
+        lightMixGameView.SetUpDebugCubes(new Vector2(newSat, randomVal), new Vector2(newSat, randomVal));
         lightMixGameView.SetUpView(startColor, goalColor);
 
 
@@ -377,7 +377,7 @@ public class LightMixerController : MiniGameController
                 }               
                 break;
         }
-         lightMixGameView.SetUpDebug(newPos, new Vector2(goalColorSaturation, goalColorValue));
+         lightMixGameView.SetUpDebugCubes(newPos, new Vector2(goalColorSaturation, goalColorValue));
 
         Color newCol = Color.HSVToRGB(newHue, newPos.x, newPos.y);
         currentColorValue = newVal;

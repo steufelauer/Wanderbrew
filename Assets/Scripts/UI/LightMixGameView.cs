@@ -12,6 +12,7 @@ public class LightMixGameView : MiniGameView
     [SerializeField] private CanvasGroup rankView;
     [SerializeField] private Image timerImage;
     [SerializeField] private Image timerImageOut;
+    [SerializeField] private GameObject dbgRoot;
 
     [Header("Debug")]
     [SerializeField] private TMP_Text dbgColorValueGoal;
@@ -45,6 +46,7 @@ public class LightMixGameView : MiniGameView
     {
         base.Start();
         Controller.OnUpdateTimer += UpdateFinishedTimer;
+        EnableDBG(false);
     }
 
     ~LightMixGameView()
@@ -63,17 +65,21 @@ public class LightMixGameView : MiniGameView
 
         //dbg
         if(useDBG){
-            Color.RGBToHSV(goalColor, out float goalColorHue, out float goalColorSat, out float goalColorVal);
-            Color.RGBToHSV(ingredientColor, out float currentColorHue, out float currentColorSat, out float currentColorVal);
-            dbgColorValueGoal.text = goalColorVal + "";
-            dbgColorValueCurrent.text = currentColorVal + "";
-            dbgStartColorImg.color = ingredientColor;
-
-            DisplayDebugLines();
+            SetUpDebugView();
         }
     }
 
-    public void SetUpDebug(Vector2 calc, Vector2 goal){
+    public void SetUpDebugView()
+    {
+        Color.RGBToHSV(goalColor, out float goalColorHue, out float goalColorSat, out float goalColorVal);
+        Color.RGBToHSV(ingredientColor, out float currentColorHue, out float currentColorSat, out float currentColorVal);
+        dbgColorValueGoal.text = goalColorVal + "";
+        dbgColorValueCurrent.text = currentColorVal + "";
+        dbgStartColorImg.color = ingredientColor;
+
+        DisplayDebugLines();
+    }
+    public void SetUpDebugCubes(Vector2 calc, Vector2 goal){
         DbgNewValPlacement.rectTransform.localPosition = new Vector3(calc.x*100, calc.y*100, 0);
         DbgGoalPlacement.rectTransform.localPosition = new Vector3(goal.x*100, goal.y*100, 0);
 
@@ -122,6 +128,18 @@ public class LightMixGameView : MiniGameView
     // {
     //     DisplayFinishConfirmation(false);
     // }
+
+    public void ToggleDBG(){
+        EnableDBG(!useDBG);
+    }
+
+    private void EnableDBG(bool enable){
+        useDBG = enable;
+        dbgRoot.SetActive(enable);
+        if(enable){
+            SetUpDebugView();
+        }
+    }
 
     private void DisplayDebugLines(){
         if(useDBG){
