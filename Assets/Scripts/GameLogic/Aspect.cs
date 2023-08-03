@@ -7,6 +7,7 @@ public enum AspectAlignment
 
     None,
     Healing,
+    Poison,
     Fire,
     Luck
 }
