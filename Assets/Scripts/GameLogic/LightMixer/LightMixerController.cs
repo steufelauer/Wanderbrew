@@ -10,10 +10,14 @@ public class LightMixerController : MiniGameController
     [SerializeField] private Transform cancelledPlacement;
     [SerializeField] private GameObject backgroundPlane;
     [SerializeField] private GameObject movementPlane;
-    [SerializeField] private MixingFinishedTrigger finishedTrigger;
+    [SerializeField] private TriggerArea finishedTrigger;
     [SerializeField] private MixingCollider lightCollider;
     [SerializeField] private MixingCollider darknessCollider;
+    [SerializeField] private float timeToFin = 3f;
     [SerializeField] private MeshRenderer dbgCube;
+
+    
+    public event Action<float> OnUpdateTimer = delegate {} ;
 
     private LightMixGameView lightMixGameView;
     private IPickable currentPickable;
@@ -21,6 +25,8 @@ public class LightMixerController : MiniGameController
     private GameObject currentMiniGameGO;
     private Plane interactionPlane;
     private bool receivedRank = true;
+    private float timer = 0f;
+    private bool inFinishArea = false;
 
     private bool interactionEnabled => miniGameStarted;
     private MixingState currentMixingState = MixingState.None;
@@ -43,6 +49,7 @@ public class LightMixerController : MiniGameController
     private float secondSlope = 0f;
 
 
+
     private float colorFullDistance;
 
     //SpeedCalc
@@ -62,10 +69,12 @@ public class LightMixerController : MiniGameController
         if(lightMixGameView == null){
             Debug.LogError($"[LightMixerController::Awake] Could not cast gameView as LightMixGameView");
         }
+        lightMixGameView.Controller = this;
         lightMixGameView.OnFinishConfirmed += FinishMiniGame;
         lightCollider.MixingColliderChanged += OnLightColliderChanged;
         darknessCollider.MixingColliderChanged += OnDarknessColliderChanged;
-        finishedTrigger.MixingFinishedTriggered += OnFinishedTriggered;
+        finishedTrigger.AreaTriggerEntered += OnFinishedTriggered;
+        finishedTrigger.AreaTriggeredExited += OnFinishedTriggerExited;
     }
 
     ~LightMixerController()
@@ -73,21 +82,21 @@ public class LightMixerController : MiniGameController
         lightMixGameView.OnFinishConfirmed -= FinishMiniGame;
         lightCollider.MixingColliderChanged -= OnLightColliderChanged;
         darknessCollider.MixingColliderChanged -= OnDarknessColliderChanged;
-        finishedTrigger.MixingFinishedTriggered -= OnFinishedTriggered;
+        finishedTrigger.AreaTriggerEntered -= OnFinishedTriggered;
+        finishedTrigger.AreaTriggeredExited -= OnFinishedTriggerExited;
     }
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
 
+
         colorFullDistance = Vector2.Distance(new Vector2(minColVal, maxColVal), new Vector2(maxColVal, minColVal));
 
         minPos = new Vector2(minColVal, maxColVal);
         maxPos = new Vector2(maxColVal, minColVal);
         line1Pos = 1f;
-        line2Pos = 0f;
-
-        
+        line2Pos = 0f;        
     }
 
     protected override void Reset()
@@ -103,6 +112,7 @@ public class LightMixerController : MiniGameController
             currentMiniGameGO.layer = 0;
         }
     }
+
 
     private void StartLightMixingMiniGame()
     {
@@ -233,6 +243,26 @@ public class LightMixerController : MiniGameController
 
     void Update()
     {
+
+        if (timer > 0f)
+        {
+            if (inFinishArea)
+            {
+                timer -= Time.deltaTime;
+                OnUpdateTimer(1f-timer/timeToFin);
+                if (timer <= 0f)
+                {
+                    timer = 0.0f;
+                    FinishMiniGame();
+                }
+            }
+            else
+            {
+                timer = 0.0f;
+                OnUpdateTimer(0f);
+            }
+        }
+
         if (!interactionEnabled) return;
         if (Input.GetMouseButtonUp(0))
         {
@@ -381,7 +411,19 @@ public class LightMixerController : MiniGameController
         {
             return;
         }
-        lightMixGameView.DisplayFinishConfirmation(true);
+        lightMixGameView.DisplayFinishedTimer(true);
+        inFinishArea = true;
+        timer = timeToFin;
+    }
+        private void OnFinishedTriggerExited(Collider other)
+    {
+        ILightMixable otherMixable = other.gameObject.GetComponent<ILightMixable>();
+        if (otherMixable == null || otherMixable != currentMixable)
+        {
+            return;
+        }
+        lightMixGameView.DisplayFinishedTimer(false);
+        inFinishArea = false;
     }
 
     private void OnTriggerEnter(Collider other)

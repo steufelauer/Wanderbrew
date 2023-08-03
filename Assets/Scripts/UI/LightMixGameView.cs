@@ -10,6 +10,8 @@ public class LightMixGameView : MiniGameView
     [SerializeField] private Image goalColorImg;
     [SerializeField] private TMP_Text rankText;
     [SerializeField] private CanvasGroup rankView;
+    [SerializeField] private Image timerImage;
+    [SerializeField] private Image timerImageOut;
 
     [Header("Debug")]
     [SerializeField] private TMP_Text dbgColorValueGoal;
@@ -24,6 +26,8 @@ public class LightMixGameView : MiniGameView
     [SerializeField] private Image DbgNewValPlacement;
     [SerializeField] private Image DbgGoalPlacement;
 
+    public LightMixerController Controller { get => controller; set => controller = value; }
+    private LightMixerController controller;
     private Color ingredientColor;    
     private Color goalColor;    
 
@@ -40,6 +44,12 @@ public class LightMixGameView : MiniGameView
     protected override void Start()
     {
         base.Start();
+        Controller.OnUpdateTimer += UpdateFinishedTimer;
+    }
+
+    ~LightMixGameView()
+    {        
+        Controller.OnUpdateTimer -= UpdateFinishedTimer;
     }
     public void SetUpView(Color ingredientColor, Color goalColor){
 
@@ -76,8 +86,11 @@ public class LightMixGameView : MiniGameView
         //DBG SetUp(ingredientColor);
     }
 
-    public override void Reset(){
+    public override void Reset()
+    {
         base.Reset();
+        UpdateFinishedTimer(0.0f);
+        DisplayFinishedTimer(false);
     }
 
     public void DisplayFinishConfirmation(bool enable){
@@ -91,15 +104,24 @@ public class LightMixGameView : MiniGameView
         rankView.interactable = true;
     }
 
-    public void FinishConfirmed()
-    {
-        DisplayFinishConfirmation(false);
-        OnFinishConfirmed();
+    public void UpdateFinishedTimer(float fill){
+        timerImage.fillAmount = fill;
     }
-    public void FinishedDeclined()
-    {
-        DisplayFinishConfirmation(false);
+
+    public void DisplayFinishedTimer(bool display){
+        timerImage.enabled = display;
+        timerImageOut.enabled = display;
     }
+
+    // public void FinishConfirmed()
+    // {
+    //     DisplayFinishConfirmation(false);
+    //     OnFinishConfirmed();
+    // }
+    // public void FinishedDeclined()
+    // {
+    //     DisplayFinishConfirmation(false);
+    // }
 
     private void DisplayDebugLines(){
         if(useDBG){
