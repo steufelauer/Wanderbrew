@@ -18,12 +18,18 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     private bool isPickedUp = false;
 
     protected virtual bool IsPrepared => isPrepared;
+
+    public GameObject MyGameObject => myGameObject;
+    private GameObject myGameObject;
+
     private bool isPrepared = false;
 
     public virtual void Start() {
         serviceLocator = ServiceLocatorProvider.GetServiceLocator();
         uIProviderService = serviceLocator.GetService<IUIProviderService>();
         tooltipProvider = uIProviderService.GetProvider<TooltipProvider>();
+
+        myGameObject = this.gameObject;
     }
 
     public Ingredient(){

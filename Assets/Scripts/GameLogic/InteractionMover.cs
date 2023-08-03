@@ -15,6 +15,7 @@ public class InteractionMover : MonoBehaviour
     bool interactionEnabled => gameStateService.CurrentGameState == GameState.Main;
     IGameStateService gameStateService;
     protected IServiceLocator serviceLocator;
+    int layerMask = 1 << 6;
 
     private void Awake() {
         
@@ -88,7 +89,7 @@ public class InteractionMover : MonoBehaviour
             //     Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
             Ray forwardRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (!Physics.Raycast(forwardRay, out hit, 100))
+            if (!Physics.Raycast(forwardRay, out hit, 100, layerMask))
             {
                 return;
             }

@@ -6,6 +6,7 @@ public interface IPickable
 {
 
     bool IsPickedUp { get; }
+    GameObject MyGameObject { get; }
 
 
     void PickUp();

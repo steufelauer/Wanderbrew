@@ -6,11 +6,8 @@ using UnityEngine;
 
 public class TriggerArea : MonoBehaviour
 {
-    [SerializeField] private Collider triggerCollider;
-
     public event Action<Collider> AreaTriggerEntered = delegate { };
     public event Action<Collider> AreaTriggeredExited = delegate { };
-
 
 
     private void OnTriggerEnter(Collider other) => AreaTriggerEntered(other);

@@ -295,7 +295,7 @@ public class LightMixerController : MiniGameController
         {
 
             Ray forwardRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            int layerMask = 1 << 6;
+            int layerMask = 1 << 7;
             RaycastHit hit;
             if (!Physics.Raycast(forwardRay, out hit, 100, layerMask))
             {

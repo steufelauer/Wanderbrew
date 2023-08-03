@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 716896276716465881}
   - component: {fileID: 716896276716465886}
   - component: {fileID: 2175302324746546876}
-  - component: {fileID: 8205175708393892071}
   - component: {fileID: 8582084735657640442}
   - component: {fileID: 4312372466302052840}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Aspect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,18 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aspectName: 
---- !u!114 &8205175708393892071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 716896276716465885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97aa6d927e16c8e43bfce685bad06b1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  alignment: 0
 --- !u!54 &8582084735657640442
 Rigidbody:
   m_ObjectHideFlags: 0

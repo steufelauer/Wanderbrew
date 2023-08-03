@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2656712593640822420}
   - component: {fileID: 6382051777025719144}
   - component: {fileID: -2332698901785712472}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Leaf1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,6 +53,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ingredientName: Leaf 1
+  baseAspectDetail:
+    Aspect: 0
+    Points: 0
   originalHerb: {fileID: 4773455191557475990}
   cutHerbs:
   - {fileID: 4773455192568002840}
