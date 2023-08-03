@@ -7,7 +7,7 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     // Start is called before the first frame update
     [SerializeField] private string ingredientName;
     [SerializeField] private IngredientAspect baseAspectDetail;
-    private IngredientAspect reachedAspectDetail;
+    private IngredientAspect reachedAspectDetail = new();
 
 
     protected IServiceLocator serviceLocator;
@@ -51,7 +51,14 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     {
         Vector3 newPos = Camera.main.ScreenToWorldPoint(pos);
         tooltipProvider.ShowTextToolTip(txt, pos);
-        tooltipProvider.ShowAspectTextToolTip(txt, baseAspectDetail, pos);
+        if (IsPrepared)
+        {
+            tooltipProvider.ShowAspectTextToolTip("Prepared " + txt, reachedAspectDetail, pos);
+        }
+        else
+        {
+            tooltipProvider.ShowAspectTextToolTip(txt, baseAspectDetail, pos);
+        }
     }
 
     public void UpdateHover(Vector3 pos)
