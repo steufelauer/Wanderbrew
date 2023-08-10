@@ -8,7 +8,7 @@ public class Herb : Ingredient, ICutable
     [SerializeField] private GameObject originalHerb;
     [SerializeField] private List<GameObject> cutHerbs;
 
-    protected override bool IsPrepared => isCut;
+    public override bool IsPrepared => isCut;
     public bool IsCut => isCut;
     private bool isCut;
     private GameObject currentActiveObject;

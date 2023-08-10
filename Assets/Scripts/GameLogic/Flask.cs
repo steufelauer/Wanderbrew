@@ -21,7 +21,7 @@ public class Flask : Ingredient, ILightMixable
     
 
     public bool IsMixed => isMixed;
-    protected override bool IsPrepared => IsMixed;
+    public override bool IsPrepared => IsMixed;
 
     private bool isMixed;
     private GameObject currentActiveObject;

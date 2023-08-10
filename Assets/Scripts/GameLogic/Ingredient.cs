@@ -8,6 +8,7 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     [SerializeField] private string ingredientName;
     [SerializeField] protected IngredientAspect baseAspectDetail;
     protected IngredientAspect reachedAspectDetail = new();
+    public Rigidbody MyRigidBody;
 
 
     protected IServiceLocator serviceLocator;
@@ -17,7 +18,7 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     public bool IsPickedUp => isPickedUp;
     private bool isPickedUp = false;
 
-    protected virtual bool IsPrepared => isPrepared;
+    public virtual bool IsPrepared => isPrepared;
 
     public GameObject MyGameObject => myGameObject;
     private GameObject myGameObject;
@@ -30,6 +31,7 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
         tooltipProvider = uIProviderService.GetProvider<TooltipProvider>();
 
         myGameObject = this.gameObject;
+        MyRigidBody = GetComponent<Rigidbody>();
     }
 
     public Ingredient(){
