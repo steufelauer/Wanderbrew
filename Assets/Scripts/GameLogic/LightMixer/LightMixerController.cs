@@ -112,35 +112,19 @@ public class LightMixerController : MiniGameController
         }
     }
 
-
-    private void StartLightMixingMiniGame()
-    {
-        startColor = currentMixable.FluidColor;
-        backgroundPlane.SetActive(true);
-
-
-        mainCamera.gameObject.SetActive(false);
-        miniGameCamera.gameObject.SetActive(true);
-
-        miniGameStarted = true;
-        lightCollider.gameObject.SetActive(true);
-        darknessCollider.gameObject.SetActive(true);
-
-
-        lightMixGameView.EnableCanvasGroup(true);
-
-        gameStateService.ChangeState(GameState.Minigame);
-        currentMiniGameGO.layer = 7;
-
-        finishedTrigger.enabled = true;
-
-        SetUpGame();
-    }
-
     protected override void SetUpGame()
     {
-        Color.RGBToHSV(startColor, out float colorHue, out float colorSat, out float colorVal);
+        
+        startColor = currentMixable.FluidColor;
+        backgroundPlane.SetActive(true);
+        
+        lightCollider.gameObject.SetActive(true);
+        darknessCollider.gameObject.SetActive(true);
+        
+        currentMiniGameGO.layer = 7;
+        finishedTrigger.enabled = true;
 
+        Color.RGBToHSV(startColor, out float colorHue, out float colorSat, out float colorVal);
 
         startColorSaturation = colorSat;
         startColorValue = colorVal;
@@ -454,7 +438,7 @@ public class LightMixerController : MiniGameController
             currentMixable = lightMixable;
             currentMixable.ActiveRigidbody(false);
             lightMixable.Place(startPlacement.position);
-            StartLightMixingMiniGame();
+            StartMiniGame();
         }
         else
         {

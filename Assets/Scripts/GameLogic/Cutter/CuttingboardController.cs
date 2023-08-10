@@ -55,19 +55,6 @@ public class CuttingboardController : MiniGameController
         }
     }
 
-    private void StartCuttingMiniGame()
-    {
-        Debug.Log("StartMinigame");
-        Reset();
-        miniGameStarted = true;
-        mainCamera.gameObject.SetActive(false);
-        miniGameCamera.gameObject.SetActive(true);
-        cutGameView.Reset();
-        cutGameView.EnableCanvasGroup(true);
-        StartRound();
-        cutGameView.EnableLines(true);
-        gameStateService.ChangeState(GameState.Minigame);
-    }
 
     protected override void Reset()
     {
@@ -191,8 +178,9 @@ public class CuttingboardController : MiniGameController
         return rank;
     }
     protected override void SetUpGame()
-    {
-        throw new System.NotImplementedException();
+    {        
+        StartRound();
+        cutGameView.EnableLines(true);
     }
 
     protected override int CalculateRank()
@@ -234,7 +222,7 @@ public class CuttingboardController : MiniGameController
         {
             currentCutable = cutable;
             cutable.Place(this.transform.position + (Vector3.up));
-            StartCuttingMiniGame();
+            StartMiniGame();
         }
         else
         {

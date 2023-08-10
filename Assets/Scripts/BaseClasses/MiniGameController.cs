@@ -46,7 +46,7 @@ public abstract class MiniGameController : MonoBehaviour
         gameView.Reset();
     }
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
     {
         Debug.Log("MG Controller OnDestroy");
         gameView.EndMinigame -= EndMiniGame;
@@ -55,9 +55,12 @@ public abstract class MiniGameController : MonoBehaviour
     protected virtual void StartMiniGame()
     {
 
+        Reset();
         miniGameStarted = true;
+        gameView.Reset();
         gameView.EnableCanvasGroup(true);
-
+        mainCamera.gameObject.SetActive(false);
+        miniGameCamera.gameObject.SetActive(true);
         gameStateService.ChangeState(GameState.Minigame);
 
         SetUpGame();
