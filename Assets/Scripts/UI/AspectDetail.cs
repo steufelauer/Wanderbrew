@@ -11,8 +11,14 @@ public class AspectDetail : MonoBehaviour
     [SerializeField] private Image aspectImg;
     [SerializeField] private Image aspectImgBG;
 
+    public AspectAlignment DisplayedAspect { get => displayedAspect; set => displayedAspect = value; }
+    private AspectAlignment displayedAspect;
+
+
     internal void SetUp(AspectAlignment aspect, float points)
     {
+        Debug.Log("Setup with aspect " + aspect);
+        displayedAspect = aspect;
         aspectImg.sprite = SpriteManager.GetSpriteByAspect(aspect);
         aspectImgBG.sprite = SpriteManager.GetSpriteByAspect(aspect);
 
@@ -29,4 +35,5 @@ public class AspectDetail : MonoBehaviour
     {
         
     }
+
 }

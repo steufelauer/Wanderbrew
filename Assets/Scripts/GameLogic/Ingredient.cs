@@ -7,8 +7,8 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     // Start is called before the first frame update
     [SerializeField] private string ingredientName;
     [SerializeField] protected IngredientAspect baseAspectDetail;
-    protected IngredientAspect reachedAspectDetail = new();
     public Rigidbody MyRigidBody;
+    public IngredientAspect ReachedAspectDetail { get => reachedAspectDetail; set => reachedAspectDetail = value; }
 
 
     protected IServiceLocator serviceLocator;
@@ -21,9 +21,12 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     public virtual bool IsPrepared => isPrepared;
 
     public GameObject MyGameObject => myGameObject;
+
+
     private GameObject myGameObject;
 
     private bool isPrepared = false;
+    protected IngredientAspect reachedAspectDetail = new();
 
     public virtual void Start() {
         serviceLocator = ServiceLocatorProvider.GetServiceLocator();

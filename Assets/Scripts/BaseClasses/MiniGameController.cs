@@ -16,7 +16,7 @@ public abstract class MiniGameController : MonoBehaviour
 
     protected IServiceLocator serviceLocator;
     protected TooltipProvider tooltipProvider;
-    protected IUIProviderService uIProviderService;
+    protected IUIProviderService uiProviderService;
     protected IGameStateService gameStateService;
 
     
@@ -29,6 +29,9 @@ public abstract class MiniGameController : MonoBehaviour
 
         serviceLocator = ServiceLocatorProvider.GetServiceLocator();
         gameStateService = serviceLocator.GetService<IGameStateService>();
+        
+        uiProviderService = serviceLocator.GetService<IUIProviderService>();
+        tooltipProvider = uiProviderService.GetProvider<TooltipProvider>();
 
         gameView.EndMinigame += EndMiniGame;
     }
@@ -54,7 +57,6 @@ public abstract class MiniGameController : MonoBehaviour
 
     protected virtual void StartMiniGame()
     {
-
         Reset();
         miniGameStarted = true;
         gameView.Reset();
@@ -62,6 +64,7 @@ public abstract class MiniGameController : MonoBehaviour
         mainCamera.gameObject.SetActive(false);
         miniGameCamera.gameObject.SetActive(true);
         gameStateService.ChangeState(GameState.Minigame);
+        tooltipProvider.HideToolTip();
 
         SetUpGame();
     }

@@ -21,7 +21,7 @@ public class Aspect : MonoBehaviour, IHoverable, IPickable
 
     protected IServiceLocator serviceLocator;
     protected TooltipProvider tooltipProvider;
-    protected IUIProviderService uIProviderService;
+    protected IUIProviderService uiProviderService;
 
     public bool IsPickedUp => isPickedUp;
 
@@ -33,8 +33,8 @@ public class Aspect : MonoBehaviour, IHoverable, IPickable
     void Start()
     {
         serviceLocator = ServiceLocatorProvider.GetServiceLocator();
-        uIProviderService = serviceLocator.GetService<IUIProviderService>();
-        tooltipProvider = uIProviderService.GetProvider<TooltipProvider>();
+        uiProviderService = serviceLocator.GetService<IUIProviderService>();
+        tooltipProvider = uiProviderService.GetProvider<TooltipProvider>();
 
         myGameObject = this.gameObject;
     }

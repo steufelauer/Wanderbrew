@@ -18,11 +18,10 @@ public class SpriteManager : MonoBehaviour
     [SerializeField] private static Sprite notFoundSprite;
 
 
-
-    void Start()
+    private void Awake()
     {
         for (int i = 0; i < aspectSprites.Count; i++)
-        {
+        {               
             aspectSpritesDict[aspectSprites[i].Aspect] = aspectSprites[i].Sprite;
         }
         notFoundSprite = dummySprite;
@@ -30,13 +29,12 @@ public class SpriteManager : MonoBehaviour
 
     // Update is called once per frame
 
-    public static Sprite GetSpriteByAspect(AspectAlignment aspect){
-        if(!aspectSpritesDict.TryGetValue(aspect, out Sprite sprite)){
+    public static Sprite GetSpriteByAspect(AspectAlignment aspect)
+    {
+        if (!aspectSpritesDict.TryGetValue(aspect, out Sprite sprite))
+        {
             return notFoundSprite;
         }
-
         return sprite;
-
-
     }
 }

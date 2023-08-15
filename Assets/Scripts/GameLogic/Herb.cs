@@ -27,6 +27,7 @@ public class Herb : Ingredient, ICutable
         currentActiveObject = cutHerbs[rank];
         isCut = true;
         
+        reachedAspectDetail.Aspect = baseAspectDetail.Aspect;
         reachedAspectDetail.Points = baseAspectDetail.Points - (baseAspectDetail.Points / maxRanks * rank);
     }
 
