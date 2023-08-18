@@ -7,4 +7,5 @@ public interface ISellable
 {
     List<IngredientAspect> AspectDetails { get; }
     int ValueMultiplier { get; }
+    GameObject GO { get; }
 }

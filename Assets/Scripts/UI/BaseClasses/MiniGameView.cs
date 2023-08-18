@@ -52,12 +52,14 @@ public class MiniGameView : MonoBehaviour
     {        
         rankView.alpha = 0;
         rankViewCanvas.enabled = false;
+        rankView.interactable = false;
     }
 
     public virtual void DisplayFinalRank(string rank)
     {
         rankText.text = "Rank: " + rank;
         rankView.alpha = 1;
+        rankView.interactable = true;
         rankViewCanvas.enabled = true;
     }
 
