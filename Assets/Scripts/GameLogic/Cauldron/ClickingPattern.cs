@@ -42,6 +42,7 @@ public class ClickingPattern : MonoBehaviour
     }
 
     public void StartPattern(float sliderSpeed){
+        ResetPattern();
         isActive = true;
         currentSliderSpeed = sliderSpeed;
         float random = 0f;
@@ -49,6 +50,13 @@ public class ClickingPattern : MonoBehaviour
         {
             random = UnityEngine.Random.Range(0f, 1f);
             patternPoints[i].StartAnimation(random, patternRevealAnimationCurve);
+        }
+    }
+
+    public void ResetPattern(){
+         for (int i = 0; i < patternPoints.Count; i++)
+        {
+           patternPoints[i].Clicked = false;
         }
     }
 

@@ -9,4 +9,5 @@ public struct Recipe
     [SerializeField] public string RecipeName;
     [SerializeField] public List<IngredientAspect> NeededAspects;
     [SerializeField] public GameObject ResultingObject;    
+    [SerializeField] public int Value;    
 }

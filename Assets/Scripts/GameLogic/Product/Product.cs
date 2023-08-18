@@ -6,18 +6,23 @@ public class Product : MonoBehaviour, ISellable, IHoverable, IPickable
 {
 
     [SerializeField] private string productName = "Unnamed Potion";
-    [SerializeField] protected List<IngredientAspect> baseAspectDetails;
+    private List<IngredientAspect> aspectDetails;
     public Rigidbody MyRigidBody;
 
     public bool IsPickedUp => isPickedUp;
 
     public GameObject MyGameObject => myGameObject;
 
+    public List<IngredientAspect> AspectDetails => aspectDetails;
+
+    public int ValueMultiplier => valueMultiplier;
+
     private bool isPickedUp = false;
     private GameObject myGameObject;
     protected IServiceLocator serviceLocator;
     protected TooltipProvider tooltipProvider;
     protected IUIProviderService uIProviderService;
+    private int valueMultiplier;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -31,7 +36,7 @@ public class Product : MonoBehaviour, ISellable, IHoverable, IPickable
     }
 
     public void SetUp(List<IngredientAspect> baseAspectDetails){
-        this.baseAspectDetails = baseAspectDetails;
+        this.aspectDetails = baseAspectDetails;
     }
 
     public void InitiateHover(Vector3 pos)
@@ -44,13 +49,13 @@ public class Product : MonoBehaviour, ISellable, IHoverable, IPickable
 
     public void InitiateHover(Vector3 pos, string txt)
     {
-        if (baseAspectDetails.Count >= 2)
+        if (aspectDetails.Count >= 2)
         {
-            tooltipProvider.ShowAspectTextToolTipMultipleAspects(txt, baseAspectDetails, pos);
+            tooltipProvider.ShowAspectTextToolTipMultipleAspects(txt, aspectDetails, pos);
         }
         else
         {
-            tooltipProvider.ShowAspectTextToolTip(txt, baseAspectDetails[0], baseAspectDetails[0].Points, pos);
+            tooltipProvider.ShowAspectTextToolTip(txt, aspectDetails[0], aspectDetails[0].Points, pos);
         }
     }
 

@@ -19,16 +19,19 @@ MonoBehaviour:
     - Aspect: 1
       Points: 2
     ResultingObject: {fileID: 0}
+    Value: 2
   - RecipeName: Powerful Healing Potion
     NeededAspects:
     - Aspect: 1
       Points: 10
     ResultingObject: {fileID: 0}
+    Value: 5
   - RecipeName: Strong Poison
     NeededAspects:
     - Aspect: 2
       Points: 5
     ResultingObject: {fileID: 0}
+    Value: 10
   - RecipeName: Antidote
     NeededAspects:
     - Aspect: 2
@@ -36,3 +39,4 @@ MonoBehaviour:
     - Aspect: 1
       Points: 5
     ResultingObject: {fileID: 0}
+    Value: 15

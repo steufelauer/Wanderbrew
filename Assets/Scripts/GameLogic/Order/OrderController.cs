@@ -16,6 +16,7 @@ public class OrderController : MonoBehaviour
     private IGameStateService gameStateService;
 
     private Recipe currentOrder;
+    private int nextId;
 
     private void Awake()
     {
@@ -36,5 +37,12 @@ public class OrderController : MonoBehaviour
     private void ActivateOrder(int recipeNr = -1)
     {
         orderView.DisplayOrder(activeOrders.myRecipes[recipeNr]);
+    }
+
+    public Recipe RequestRecipe()
+    {
+        nextId = nextId >= activeOrders.myRecipes.Count ? 0 : nextId;
+        Recipe nextRecipe = activeOrders.myRecipes[nextId++];
+        return nextRecipe;
     }
 }
