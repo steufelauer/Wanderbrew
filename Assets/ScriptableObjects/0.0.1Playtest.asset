@@ -19,7 +19,7 @@ MonoBehaviour:
     - Aspect: 1
       Points: 2
     ResultingObject: {fileID: 0}
-    Value: 2
+    Value: 15
   - RecipeName: Powerful Healing Potion
     NeededAspects:
     - Aspect: 1
