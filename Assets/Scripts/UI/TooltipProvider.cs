@@ -20,6 +20,7 @@ public class TooltipProvider : MonoBehaviour, IUIProvider
 
     public void ShowTextToolTip(string text, Vector3 position) => textTooltipHandler.ShowTooltip(text, position);
     public void ShowAspectTextToolTip(string text, IngredientAspect detail, float reached, Vector3 position) => textTooltipHandler.ShowAspectTooltip(text, detail, reached, position);
+    public void ShowAspectTextToolTipMultipleAspects(string text, List<IngredientAspect> detail, Vector3 position) => textTooltipHandler.ShowAspectTooltipMultpleAspects(text, detail,position);
     public void UpdatePositionTextToolTip(Vector3 position) => textTooltipHandler.UpdatePosition(position);
     public void HideToolTip() => textTooltipHandler.HideToolTip();
 }

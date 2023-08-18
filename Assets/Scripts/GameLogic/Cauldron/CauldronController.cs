@@ -19,6 +19,8 @@ public class CauldronController : MiniGameController
     [SerializeField] private ClickingPattern clickingPattern;
     [SerializeField] private float speed = 10f;
     [SerializeField] private int clickCount = 0;
+    [SerializeField] private Product productPrefab;
+    [SerializeField] private Transform spawnParentTransform;
 
 
 
@@ -26,6 +28,7 @@ public class CauldronController : MiniGameController
 
 
     private float sliderSpeed = 0.5f;
+    private bool hasFinishedProduct = false;
 
 
     private List<Ingredient> ingredients = new();
@@ -115,6 +118,11 @@ public class CauldronController : MiniGameController
         base.EndMiniGame();
         Debug.Log("EndMiniGame");
         clickingPattern.gameObject.SetActive(false);
+        if(hasFinishedProduct){
+            Product newProd = Instantiate(productPrefab, cancelIngredientDrop);
+            newProd.transform.parent = spawnParentTransform;
+            newProd.SetUp(ingredientAspects);
+        }
     }
 
     private void FinishMiniGame()
@@ -124,6 +132,13 @@ public class CauldronController : MiniGameController
         miniGameStarted = false;
         Debug.Log("Rank: " + rank);
         cauldronGameView.DisplayFinalRank("ABCDEFGH"[rank] + "");
+        hasFinishedProduct = true;
+        for (int i = 0; i < ingredientAspects.Count; i++)
+        {
+            Debug.Log("Aspect:" + ingredientAspects[i].Points + " * " + activePattern.ClickedPointCount + " / " + activePattern.AllPointCount);
+            ingredientAspects[i].Points = ingredientAspects[i].Points * (activePattern.ClickedPointCount * 1f / activePattern.AllPointCount);
+            Debug.Log("Aspect:" + ingredientAspects[i].Points);
+        }
     }
 
     protected override void SetUpGame()
@@ -179,6 +194,7 @@ public class CauldronController : MiniGameController
 
             cauldronGameView.UpdateIngredientCount(ingredients.Count, maxIngredients);
             CalculateAspectPoints();
+            Destroy(ingredient.gameObject);
 
             if (ingredients.Count >= maxIngredients)
             {

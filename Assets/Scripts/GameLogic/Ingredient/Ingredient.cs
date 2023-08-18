@@ -60,7 +60,6 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
 
     public void InitiateHover(Vector3 pos, string txt)
     {
-        Vector3 newPos = Camera.main.ScreenToWorldPoint(pos);
         tooltipProvider.ShowTextToolTip(txt, pos);
         if (IsPrepared)
         {
@@ -79,8 +78,7 @@ public class Ingredient : MonoBehaviour, IPickable, IHoverable
     }
 
     public void DisableHover()
-    {
-        
+    {        
         tooltipProvider.HideToolTip();
     }
 

@@ -172,7 +172,7 @@ public class CuttingboardController : MiniGameController
             dbgLog += " / " + ranks.Count + " -> " + finalRank;
             finalRank = finalRank > maxRanks ? maxRanks : finalRank;
 
-            cutGameView.DisplayFinalRank("Rank " + "ABCDEFGH"[finalRank]);
+            cutGameView.DisplayFinalRank("ABCDEFGH"[finalRank]+"");
             currentCutable.Cut(finalRank, maxRanks);
         }
         return rank;
