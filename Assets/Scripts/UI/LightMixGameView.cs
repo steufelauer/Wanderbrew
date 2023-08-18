@@ -8,8 +8,6 @@ using UnityEngine.UI;
 public class LightMixGameView : MiniGameView
 {
     [SerializeField] private Image goalColorImg;
-    [SerializeField] private TMP_Text rankText;
-    [SerializeField] private CanvasGroup rankView;
     [SerializeField] private Image timerImage;
     [SerializeField] private Image timerImageOut;
     [SerializeField] private GameObject dbgRoot;
@@ -102,12 +100,6 @@ public class LightMixGameView : MiniGameView
     public void DisplayFinishConfirmation(bool enable){
         finishedConfirmation.alpha = enable? 1:0;
         finishedConfirmation.interactable = enable;
-    }
-
-    public void DisplayRank(string rank){
-        rankText.text = "Rank: " +rank;
-        rankView.alpha = 1;
-        rankView.interactable = true;
     }
 
     public void UpdateFinishedTimer(float fill){

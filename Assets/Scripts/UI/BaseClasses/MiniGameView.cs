@@ -9,6 +9,9 @@ using UnityEngine.UI;
 public class MiniGameView : MonoBehaviour
 {
     //TODO take into account that the start line point of the user can be on bottom as well, not only top
+    [SerializeField] protected TMP_Text rankText;
+    [SerializeField] protected CanvasGroup rankView;
+    
     public event Action EndMinigame = delegate { };
 
     private Canvas canvas;
@@ -44,7 +47,15 @@ public class MiniGameView : MonoBehaviour
     }
 
     public virtual void Reset()
+    {        
+        rankView.alpha = 0;
+    }
+
+    public virtual void DisplayFinalRank(string rank)
     {
+        rankText.text = "Rank: " + rank;
+        rankView.alpha = 1;
+        rankView.interactable = true;
     }
 
 }

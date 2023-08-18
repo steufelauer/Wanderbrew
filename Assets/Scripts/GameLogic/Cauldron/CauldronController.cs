@@ -7,6 +7,7 @@ using UnityEngine;
 public class CauldronController : MiniGameController
 {
     // Start is called before the first frame update
+
     [SerializeField] private Transform cancelIngredientDrop;
 
     [SerializeField] private GameObject cauldronWaterDisk;
@@ -17,25 +18,29 @@ public class CauldronController : MiniGameController
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private ClickingPattern clickingPattern;
     [SerializeField] private float speed = 10f;
-    [SerializeField] private float clickCount = 0f;
+    [SerializeField] private int clickCount = 0;
 
 
 
-    public event Action<float> OnUpdateTimer = delegate {} ;
+    public event Action<float> OnUpdateTimer = delegate { };
 
-    
-    private float sliderSpeed = 0f;
+
+    private float sliderSpeed = 0.5f;
 
 
     private List<Ingredient> ingredients = new();
+    private List<IngredientAspect> ingredientAspects = new();
     private CauldronGameView cauldronGameView;
     private float currentPosAnimationCurve = 0f;
+
+    private ClickingPattern activePattern;
 
 
     private bool interactionEnabled => miniGameStarted;
 
-    protected override void Awake(){
-        base.Awake();        
+    protected override void Awake()
+    {
+        base.Awake();
         cauldronGameView = gameView as CauldronGameView;
     }
     protected override void Start()
@@ -84,35 +89,67 @@ public class CauldronController : MiniGameController
             if (point != null)
             {
                 point.Click();
+                UpdateProgress();
+            }
+
+            if (activePattern.UnClickedPointCount == 0)
+            {
+                Debug.Log("activePattern.UnClickedPointCount == " + activePattern.UnClickedPointCount);
+                FinishMiniGame();
             }
         }
     }
 
-    public void SliderValueChanged(float speed){
+    private void UpdateProgress()
+    {
+        cauldronGameView.UpdateClickedPoints(activePattern.ClickedPointCount, activePattern.AllPointCount);
+    }
+
+    public void SliderValueChanged(float speed)
+    {
         sliderSpeed = speed;
+        activePattern.CurrentSliderSpeed = speed;
     }
     protected override void EndMiniGame()
     {
         base.EndMiniGame();
+        Debug.Log("EndMiniGame");
         clickingPattern.gameObject.SetActive(false);
+    }
+
+    private void FinishMiniGame()
+    {
+        Debug.Log("FinishMG");
+        int rank = CalculateRank();
+        miniGameStarted = false;
+        Debug.Log("Rank: " + rank);
+        cauldronGameView.DisplayFinalRank("ABCDEFGH"[rank] + "");
     }
 
     protected override void SetUpGame()
     {
-        Debug.Log("SetUpGame");        
+        Debug.Log("SetUpGame");
         clickingPattern.gameObject.SetActive(true);
+        activePattern = clickingPattern;
+        activePattern.StartPattern(sliderSpeed);
+        
+        cauldronGameView.UpdateIngredientAspectCountMGView(ingredientAspects);
     }
 
     protected override int CalculateRank()
     {
-        Debug.Log("CalculateRank");
-        return 0;
+        Debug.Log("CalculateRank with missclicks: " + clickCount);
+        int rank = clickingPattern.GetRankFromMissclicks(clickCount - clickingPattern.AllPointCount);
+        rank = rank == -1 || rank > maxRanks ? maxRanks : rank;
+        return rank;
     }
 
-    protected override void Reset(){
+    protected override void Reset()
+    {
         base.Reset();
         clickCount = 0;
         clickingPattern.gameObject.SetActive(false);
+        ingredients.Clear();
 
         // if (!miniGameStarted)
         // {
@@ -156,18 +193,22 @@ public class CauldronController : MiniGameController
         }
     }
 
-    private void CalculateAspectPoints(){
-        List<IngredientAspect> ingredientAspects = new();
+    private void CalculateAspectPoints()
+    {
+        ingredientAspects.Clear();
 
         for (int i = 0; i < ingredients.Count; i++)
         {
             var aspect = ingredientAspects.Where(x => x.Aspect == ingredients[i].ReachedAspectDetail.Aspect).FirstOrDefault();
-            if(aspect != null){
+            if (aspect != null)
+            {
                 aspect.Points += ingredients[i].ReachedAspectDetail.Points;
-            }else{
-                ingredientAspects.Add(new IngredientAspect { Aspect = ingredients[i].ReachedAspectDetail.Aspect, Points = ingredients[i].ReachedAspectDetail.Points});
+            }
+            else
+            {
+                ingredientAspects.Add(new IngredientAspect { Aspect = ingredients[i].ReachedAspectDetail.Aspect, Points = ingredients[i].ReachedAspectDetail.Points });
             }
         }
-        cauldronGameView.UpdateIngredientAspectCount(ingredientAspects);
+        cauldronGameView.UpdateIngredientAspectCountWorldView(ingredientAspects);
     }
 }

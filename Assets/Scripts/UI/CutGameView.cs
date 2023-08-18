@@ -24,9 +24,7 @@ public class CutGameView : MiniGameView
     [SerializeField] private Image mouseStartPoint;
     [SerializeField] private Image mouseEndPoint;
     [SerializeField] private Image mouseLineImage;
-    [SerializeField] private Button ReturnButton;
     [SerializeField] private TMP_Text cutRankText;
-    [SerializeField] private TMP_Text finalRankText;
     [SerializeField] private List<string> perfectTxts;
     [SerializeField] private List<string> rankATxts;
     [SerializeField] private List<string> rankBTxts;
@@ -82,8 +80,7 @@ public class CutGameView : MiniGameView
     {
         base.Reset();
         cutRankText.text = "";
-        finalRankText.text = "";
-        ReturnButton.gameObject.SetActive(false);
+        rankText.text = "";
         EnableCanvasGroup(false);
         //EnableLines(false);
         mouseLineImage.transform.localScale = Vector3.zero;
@@ -295,10 +292,10 @@ public class CutGameView : MiniGameView
 
     }
 
-    public void DisplayFinalRank(string content)
-    {
-        finalRankText.text = content;
-        ReturnButton.gameObject.SetActive(true);
-    }
+    // public void DisplayFinalRank(string content)
+    // {
+    //     rankText.text = content;
+    //     ReturnButton.gameObject.SetActive(true);
+    // }
 
 }
